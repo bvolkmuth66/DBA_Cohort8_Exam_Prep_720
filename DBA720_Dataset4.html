@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>DBA 720 Practice Lab - Dataset 4</title>
+
+<style>
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f5f7fa;
+    margin:20px;
+}
+
+.card{
+    background:white;
+    padding:20px;
+    margin-bottom:20px;
+    border-radius:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,.1);
+}
+
+h1,h2,h3{
+    color:#17375e;
+}
+
+button{
+    padding:10px;
+    margin:5px;
+    cursor:pointer;
+}
+
+.pass{
+    color:green;
+    font-weight:bold;
+}
+
+.fail{
+    color:red;
+    font-weight:bold;
+}
+
+input,select,textarea{
+    padding:5px;
+    margin-top:5px;
+    margin-bottom:10px;
+}
+
+#analysisSection{
+    display:none;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>DBA 720 Practice Lab</h1>
+
+<div class="card">
+
+<h2>
+Dataset 4: Cryptocurrency Wallet User Experience
+</h2>
+
+<p>
+A cryptocurrency wallet provider is experiencing
+slower-than-expected growth in active users.
+</p>
+
+<p>
+Management invested heavily in interface design,
+usability improvements, reliability enhancements,
+and security controls. Despite these investments,
+user retention remains inconsistent.
+</p>
+
+<p>
+Researchers believe trust may play a critical role
+in determining whether users continue using the
+wallet over time.
+</p>
+
+<hr>
+
+<h3>
+Measure A
+</h3>
+
+<p>
+The degree to which users find the wallet easy
+to learn and understand.
+</p>
+
+<h3>
+Measure B
+</h3>
+
+<p>
+The degree to which users can accomplish tasks
+quickly and efficiently.
+</p>
+
+<h3>
+Measure C
+</h3>
+
+<p>
+The degree to which users feel the wallet is
+reliable and under their control.
+</p>
+
+<h3>
+Measure D
+</h3>
+
+<p>
+The degree to which users feel safe and secure
+while using the wallet.
+</p>
+
+<h3>
+Measure E
+</h3>
+
+<p>
+The likelihood that users will continue using
+the wallet in the future.
+</p>
+
+<hr>
+
+<h3>
+Question 1
+</h3>
+
+<p>
+Which measure represents the primary outcome
+that researchers wish to explain?
+</p>
+
+<select id="outcome">
+
+<option value="">Select</option>
+
+<option value="A">Measure A</option>
+<option value="B">Measure B</option>
+<option value="C">Measure C</option>
+<option value="D">Measure D</option>
+<option value="E">Measure E</option>
+
+</select>
+
+<hr>
+
+<h3>
+Question 2
+</h3>
+
+<p>
+Which measure is most likely the dependent variable?
+</p>
+
+<select id="dv">
+
+<option value="">Select</option>
+
+<option value="A">Measure A</option>
+<option value="B">Measure B</option>
+<option value="C">Measure C</option>
+<option value="D">Measure D</option>
+<option value="E">Measure E</option>
+
+</select>
+
+<hr>
+
+<h3>
+Question 3
+</h3>
+
+<p>
+Select all possible predictor variables.
+</p>
+
+<label>
+<input type="checkbox" id="ivA">
+Measure A
+</label><br>
+
+<label>
+<input type="checkbox" id="ivB">
+Measure B
+</label><br>
+
+<label>
+<input type="checkbox" id="ivC">
+Measure C
+</label><br>
+
+<label>
+<input type="checkbox" id="ivD">
+Measure D
+</label><br>
+
+<label>
+<input type="checkbox" id="ivE">
+Measure E
+</label>
+
+<hr>
+
+<h3>
+Question 4
+</h3>
+
+<p>
+Which measure appears most closely related to
+user confidence and security?
+</p>
+
+<select id="trustQuestion">
+
+<option value="">Select</option>
+
+<option value="A">Measure A</option>
+<option value="B">Measure B</option>
+<option value="C">Measure C</option>
+<option value="D">Measure D</option>
+<option value="E">Measure E</option>
+
+</select>
+
+<hr>
+
+<h3>
+Question 5
+</h3>
+
+<p>
+Which statistical method is most appropriate?
+</p>
+
+<select id="method">
+
+<option value="">Select</option>
+
+<option value="correlation">
+Correlation Analysis
+</option>
+
+<option value="regression">
+Multiple Regression
+</option>
+
+<option value="anova">
+ANOVA
+</option>
+
+</select>
+
+<hr>
+
+<h3>
+Question 6
+</h3>
+
+<p>
+Which measure is most likely to mediate the
+relationship between user experience and future
+wallet usage?
+</p>
+
+<select id="mediator">
+
+<option value="">Select</option>
+
+<option value="A">Measure A</option>
+<option value="B">Measure B</option>
+<option value="C">Measure C</option>
+<option value="D">Measure D</option>
+<option value="E">Measure E</option>
+
+</select>
+
+<br><br>
+
+<button onclick="gradePhase1()">
+
+Submit Phase 1
+
+</button>
+
+<div id="phaseResults"></div>
+
+</div>
+
+<div id="analysisSection">
+
+<div class="card">
+
+<h2>Dataset Unlocked</h2>
+
+<p>
+
+Measure A = Perspicuity<br>
+Measure B = Efficiency<br>
+Measure C = Dependability<br>
+Measure D = Trust<br>
+Measure E = Behavioral Intention
+
+</p>
+
+<button onclick="exportCSV()">
+
+Download Dataset CSV
+
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>Excel Instructions</h2>
+
+<ol>
+
+<li>Download the dataset CSV.</li>
+
+<li>Open the file in Excel.</li>
+
+<li>Run Descriptive Statistics.</li>
+
+<li>Run Correlation Analysis.</li>
+
+<li>Run Multiple Regression.</li>
+
+<li>Return to this page and enter your results.</li>
+
+</ol>
+
+<p>
+Remember that the objective is to determine which
+factors most strongly influence continued wallet usage.
+</p>
+
+</div>
+
+<div class="card">
+
+<h2>Enter Excel Results</h2>
+
+<h3>Descriptive Statistics</h3>
+
+<label>Perspicuity Mean</label><br>
+<input type="number" step="0.01"><br>
+
+<label>Efficiency Mean</label><br>
+<input type="number" step="0.01"><br>
+
+<label>Dependability Mean</label><br>
+<input type="number" step="0.01"><br>
+
+<label>Trust Mean</label><br>
+<input type="number" step="0.01"><br>
+
+<label>Behavioral Intention Mean</label><br>
+<input type="number" step="0.01"><br>
+
+<hr>
+
+<h3>Correlations with Behavioral Intention</h3>
+
+<label>Perspicuity → Behavioral Intention</label><br>
+<input type="number" step="0.01"><br>
+
+<label>Efficiency → Behavioral Intention</label><br>
+<input type="number" step="0.01"><br>
+
+<label>Dependability → Behavioral Intention</label><br>
+<input type="number" step="0.01"><br>
+
+<label>Trust → Behavioral Intention</label><br>
+<input type="number" step="0.01"><br>
+
+<hr>
+
+<h3>Regression Results</h3>
+
+<label>Multiple R</label><br>
+<input type="number" step="0.01"><br>
+
+<label>R²</label><br>
+<input type="number" step="0.01"><br>
+
+<label>Adjusted R²</label><br>
+<input type="number" step="0.01"><br>
+
+<hr>
+
+<label>Strongest Predictor</label><br>
+
+<select>
+
+<option value="">Select</option>
+
+<option>Perspicuity</option>
+
+<option>Efficiency</option>
+
+<option>Dependability</option>
+
+<option>Trust</option>
+
+</select>
+
+<hr>
+
+<h3>Significant Predictors</h3>
+
+<p>
+Select all variables that were statistically significant.
+</p>
+
+<label>
+<input type="checkbox">
+Perspicuity
+</label><br>
+
+<label>
+<input type="checkbox">
+Efficiency
+</label><br>
+
+<label>
+<input type="checkbox">
+Dependability
+</label><br>
+
+<label>
+<input type="checkbox">
+Trust
+</label>
+
+</div>
+
+<div class="card">
+
+<h2>Pre-Interpretation Reflection</h2>
+
+<h3>
+Before reviewing your regression results:
+</h3>
+
+<p>
+Which variable do you believe will be most influential?
+</p>
+
+<select>
+
+<option value="">Select</option>
+
+<option>Perspicuity</option>
+
+<option>Efficiency</option>
+
+<option>Dependability</option>
+
+<option>Trust</option>
+
+</select>
+
+<p>
+After completing the regression, compare your prediction
+to the actual results.
+</p>
+
+</div>
+
+<div class="card">
+
+<h2>Interpretation Questions</h2>
+
+<h3>
+1. Why is trust important in cryptocurrency wallet adoption?
+</h3>
+
+<textarea rows="5" cols="80"></textarea>
+
+<br>
+
+<button onclick="toggleAnswer('answer1')">
+Show Suggested Answer
+</button>
+
+<div id="answer1" style="display:none;">
+
+<p>
+Trust plays a critical role because users must feel
+confident that their assets, transactions, and data
+are secure. Even highly usable systems may fail to
+retain users if trust is lacking.
+</p>
+
+</div>
+
+<hr>
+
+<h3>
+2. Which variable had the strongest influence on
+Behavioral Intention?
+</h3>
+
+<textarea rows="5" cols="80"></textarea>
+
+<br>
+
+<button onclick="toggleAnswer('answer2')">
+Show Suggested Answer
+</button>
+
+<div id="answer2" style="display:none;">
+
+<p>
+The strongest predictor is the variable with the
+largest statistically significant regression
+coefficient. This must be determined from the
+regression output rather than the correlation matrix.
+</p>
+
+</div>
+
+<hr>
+
+<h3>
+3. Would improving usability alone guarantee
+continued wallet usage?
+</h3>
+
+<textarea rows="5" cols="80"></textarea>
+
+<br>
+
+<button onclick="toggleAnswer('answer3')">
+Show Suggested Answer
+</button>
+
+<div id="answer3" style="display:none;">
+
+<p>
+No. Usability may increase trust and improve user
+experience, but trust ultimately plays a critical
+role in determining continued usage intentions.
+</p>
+
+</div>
+
+<hr>
+
+<h3>
+4. What recommendations would you make to wallet
+developers?
+</h3>
+
+<textarea rows="6" cols="80"></textarea>
+
+<br>
+
+<button onclick="toggleAnswer('answer4')">
+Show Suggested Answer
+</button>
+
+<div id="answer4" style="display:none;">
+
+<p>
+Developers should improve usability, simplify
+navigation, strengthen reliability, provide better
+security communication, and focus on building user
+trust through transparency and consistent performance.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+const dataset = [
+
+[7,7,7,8,9],
+[6,6,6,7,8],
+[5,5,6,6,7],
+[8,8,8,9,10],
+[4,4,5,5,5],
+[7,6,7,8,8],
+[6,7,6,7,8],
+[3,4,4,4,4],
+[8,8,7,9,10],
+[5,5,5,6,6],
+[7,8,7,8,9],
+[6,5,6,7,7],
+[4,4,4,4,5],
+[8,9,8,9,10],
+[7,7,6,8,9],
+[5,5,5,6,6],
+[6,6,6,7,7],
+[7,8,7,8,9],
+[3,3,4,4,4],
+[8,8,8,9,10]
+
+];
+
+function gradePhase1(){
+
+let score = 0;
+
+if(document.getElementById("outcome").value==="E"){
+score++;
+}
+
+if(document.getElementById("dv").value==="E"){
+score++;
+}
+
+if(
+document.getElementById("ivA").checked &&
+document.getElementById("ivB").checked &&
+document.getElementById("ivC").checked &&
+document.getElementById("ivD").checked &&
+!document.getElementById("ivE").checked
+){
+score++;
+}
+
+if(document.getElementById("trustQuestion").value==="D"){
+score++;
+}
+
+if(document.getElementById("method").value==="regression"){
+score++;
+}
+
+if(document.getElementById("mediator").value==="D"){
+score++;
+}
+
+let percent =
+Math.round((score/6)*100);
+
+let html =
+"<h3>Score: " + percent + "%</h3>";
+
+if(percent >= 80){
+
+html +=
+"<div class='pass'>✅ Dataset Unlocked</div>";
+
+document.getElementById(
+"analysisSection"
+).style.display = "block";
+
+}else{
+
+html +=
+"<div class='fail'>❌ Review your answers and try again.</div>";
+
+}
+
+document.getElementById(
+"phaseResults"
+).innerHTML = html;
+
+}
+
+function exportCSV(){
+
+let csv =
+"Perspicuity,Efficiency,Dependability,Trust,Behavioral Intention\n";
+
+dataset.forEach(row=>{
+
+csv += row.join(",") + "\n";
+
+});
+
+let blob =
+new Blob(
+[csv],
+{type:"text/csv"}
+);
+
+let a =
+document.createElement("a");
+
+a.href =
+URL.createObjectURL(blob);
+
+a.download =
+"Dataset4_Wallet_UX.csv";
+
+a.click();
+
+}
+
+function toggleAnswer(id){
+
+let answer =
+document.getElementById(id);
+
+if(answer.style.display==="none"){
+
+answer.style.display="block";
+
+}else{
+
+answer.style.display="none";
+
+}
+
+}
+
+</script>
+
+</body>
+</html>

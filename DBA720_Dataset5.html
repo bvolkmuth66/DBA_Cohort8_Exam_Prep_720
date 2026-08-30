@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>DBA 720 Practice Lab - Dataset 5</title>
+
+<style>
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f5f7fa;
+    margin:20px;
+}
+
+.card{
+    background:white;
+    padding:20px;
+    margin-bottom:20px;
+    border-radius:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,.1);
+}
+
+h1,h2,h3{
+    color:#17375e;
+}
+
+button{
+    padding:10px;
+    margin:5px;
+    cursor:pointer;
+}
+
+.pass{
+    color:green;
+    font-weight:bold;
+}
+
+.fail{
+    color:red;
+    font-weight:bold;
+}
+
+input,select,textarea{
+    padding:5px;
+    margin-top:5px;
+    margin-bottom:10px;
+}
+
+#analysisSection{
+    display:none;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>DBA 720 Practice Lab</h1>
+
+<div class="card">
+
+<h2>
+Dataset 5: Blockchain Securities Trading
+</h2>
+
+<p>
+A financial exchange is evaluating a new blockchain-based
+securities trading platform. Management believes adoption
+may depend on several factors including transaction
+transparency, processing speed, security, and transaction
+cost reduction.
+</p>
+
+<p>
+Researchers collected survey data to determine which
+factors most strongly influence platform adoption.
+</p>
+
+<hr>
+
+<h3>Question 1</h3>
+
+<p>
+Which construct appears to be the primary outcome
+of the study?
+</p>
+
+<select id="outcome">
+
+<option value="">Select</option>
+
+<option value="Transparency">Transparency</option>
+
+<option value="Speed">Processing Speed</option>
+
+<option value="Security">Security</option>
+
+<option value="Cost">Cost Reduction</option>
+
+<option value="Adoption">Platform Adoption</option>
+
+</select>
+
+<hr>
+
+<h3>Question 2</h3>
+
+<p>
+Which construct is the dependent variable?
+</p>
+
+<select id="dv">
+
+<option value="">Select</option>
+
+<option value="Transparency">Transparency</option>
+
+<option value="Speed">Processing Speed</option>
+
+<option value="Security">Security</option>
+
+<option value="Cost">Cost Reduction</option>
+
+<option value="Adoption">Platform Adoption</option>
+
+</select>
+
+<hr>
+
+<h3>Question 3</h3>
+
+<p>
+Select all independent variables.
+</p>
+
+<label>
+<input type="checkbox" id="ivTransparency">
+Transparency
+</label><br>
+
+<label>
+<input type="checkbox" id="ivSpeed">
+Processing Speed
+</label><br>
+
+<label>
+<input type="checkbox" id="ivSecurity">
+Security
+</label><br>
+
+<label>
+<input type="checkbox" id="ivCost">
+Cost Reduction
+</label><br>
+
+<label>
+<input type="checkbox" id="ivAdoption">
+Platform Adoption
+</label>
+
+<hr>
+
+<h3>Question 4</h3>
+
+<p>
+Which statistical technique is most appropriate?
+</p>
+
+<select id="method">
+
+<option value="">Select</option>
+
+<option value="correlation">
+Correlation Analysis
+</option>
+
+<option value="regression">
+Multiple Regression
+</option>
+
+<option value="anova">
+ANOVA
+</option>
+
+</select>
+
+<hr>
+
+<h3>Question 5</h3>
+
+<p>
+Which factor do you predict will have the strongest
+impact on platform adoption?
+</p>
+
+<select id="prediction">
+
+<option value="">Select</option>
+
+<option value="Transparency">
+Transparency
+</option>
+
+<option value="Speed">
+Processing Speed
+</option>
+
+<option value="Security">
+Security
+</option>
+
+<option value="Cost">
+Cost Reduction
+</option>
+
+</select>
+
+<hr>
+
+<h3>Question 6</h3>
+
+<p>
+Which factor would you expect regulators to be most
+concerned with?
+</p>
+
+<select id="regulator">
+
+<option value="">Select</option>
+
+<option value="Transparency">
+Transparency
+</option>
+
+<option value="Speed">
+Processing Speed
+</option>
+
+<option value="Security">
+Security
+</option>
+
+<option value="Cost">
+Cost Reduction
+</option>
+
+</select>
+
+<br><br>
+
+<button onclick="gradePhase1()">
+
+Submit Phase 1
+
+</button>
+
+<div id="phaseResults"></div>
+
+</div>
+
+<div id="analysisSection">
+
+<div class="card">
+
+<h2>Dataset Unlocked</h2>
+
+<p>
+
+Variable 1 = Transparency<br>
+Variable 2 = Processing Speed<br>
+Variable 3 = Security<br>
+Variable 4 = Cost Reduction<br>
+Variable 5 = Platform Adoption
+
+</p>
+
+<button onclick="exportCSV()">
+
+Download Dataset CSV
+
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>Excel Analysis Requirements</h2>
+
+<ol>
+
+<li>Download the dataset CSV.</li>
+
+<li>Open the file in Excel.</li>
+
+<li>Run Descriptive Statistics.</li>
+
+<li>Create a Correlation Matrix.</li>
+
+<li>Run Multiple Regression.</li>
+
+<li>Return here and enter your findings.</li>
+
+</ol>
+
+<p>
+
+You should determine:
+
+</p>
+
+<ul>
+
+<li>Which variable has the strongest correlation with Platform Adoption.</li>
+
+<li>Which variable is the strongest predictor in the regression model.</li>
+
+<li>Whether all predictors are statistically significant.</li>
+
+<li>The managerial implications of your findings.</li>
+
+</ul>
+
+</div>
+
+<div class="card">
+
+<h2>Enter Excel Results</h2>
+
+<h3>Descriptive Statistics</h3>
+
+<label>Transparency Mean</label><br>
+<input type="number" step="0.01"><br>
+
+<label>Processing Speed Mean</label><br>
+<input type="number" step="0.01"><br>
+
+<label>Security Mean</label><br>
+<input type="number" step="0.01"><br>
+
+<label>Cost Reduction Mean</label><br>
+<input type="number" step="0.01"><br>
+
+<label>Platform Adoption Mean</label><br>
+<input type="number" step="0.01"><br>
+
+<hr>
+
+<h3>Correlations with Platform Adoption</h3>
+
+<label>Transparency → Adoption</label><br>
+<input type="number" step="0.01"><br>
+
+<label>Processing Speed → Adoption</label><br>
+<input type="number" step="0.01"><br>
+
+<label>Security → Adoption</label><br>
+<input type="number" step="0.01"><br>
+
+<label>Cost Reduction → Adoption</label><br>
+<input type="number" step="0.01"><br>
+
+<hr>
+
+<h3>Regression Results</h3>
+
+<label>Multiple R</label><br>
+<input type="number" step="0.01"><br>
+
+<label>R²</label><br>
+<input type="number" step="0.01"><br>
+
+<label>Adjusted R²</label><br>
+<input type="number" step="0.01"><br>
+
+<hr>
+
+<label>Strongest Predictor</label><br>
+
+<select id="strongestPredictor">
+
+<option value="">Select</option>
+
+<option value="Transparency">
+Transparency
+</option>
+
+<option value="Speed">
+Processing Speed
+</option>
+
+<option value="Security">
+Security
+</option>
+
+<option value="Cost">
+Cost Reduction
+</option>
+
+</select>
+
+<hr>
+
+<h3>Statistically Significant Predictors</h3>
+
+<p>
+Select all predictors that were statistically significant.
+</p>
+
+<label>
+<input type="checkbox" id="sigTransparency">
+Transparency
+</label><br>
+
+<label>
+<input type="checkbox" id="sigSpeed">
+Processing Speed
+</label><br>
+
+<label>
+<input type="checkbox" id="sigSecurity">
+Security
+</label><br>
+
+<label>
+<input type="checkbox" id="sigCost">
+Cost Reduction
+</label>
+
+</div>
+
+<div class="card">
+
+<h2>Pre-Interpretation Reflection</h2>
+
+<h3>
+Before running the regression:
+</h3>
+
+<p>
+Which variable do you believe will have the strongest influence on platform adoption?
+</p>
+
+<select>
+
+<option value="">Select</option>
+
+<option>Transparency</option>
+
+<option>Processing Speed</option>
+
+<option>Security</option>
+
+<option>Cost Reduction</option>
+
+</select>
+
+<p>
+After completing the analysis, compare your prediction
+with the actual regression results.
+</p>
+
+</div>
+
+<div class="card">
+
+<h2>Interpretation Questions</h2>
+
+<h3>
+1. Based on your regression results, which factor had the
+greatest impact on platform adoption?
+</h3>
+
+<textarea rows="5" cols="80"></textarea>
+
+<br>
+
+<button onclick="toggleAnswer('answer1')">
+Show Suggested Answer
+</button>
+
+<div id="answer1" style="display:none;">
+
+<p>
+The strongest predictor is the independent variable
+with the largest statistically significant regression
+coefficient. This determination should be based on
+the regression output rather than the correlation matrix
+alone.
+</p>
+
+</div>
+
+<hr>
+
+<h3>
+2. Were all hypotheses supported?
+</h3>
+
+<textarea rows="5" cols="80"></textarea>
+
+<br>
+
+<button onclick="toggleAnswer('answer2')">
+Show Suggested Answer
+</button>
+
+<div id="answer2" style="display:none;">
+
+<p>
+Hypothesis support should be evaluated using both
+coefficient direction and statistical significance.
+A positive coefficient alone does not automatically
+indicate support if the predictor is not significant.
+</p>
+
+</div>
+
+<hr>
+
+<h3>
+3. What are the primary managerial implications?
+</h3>
+
+<textarea rows="6" cols="80"></textarea>
+
+<br>
+
+<button onclick="toggleAnswer('answer3')">
+Show Suggested Answer
+</button>
+
+<div id="answer3" style="display:none;">
+
+<p>
+Management should prioritize investment in the factors
+that demonstrate the greatest influence on platform
+adoption. Resources should be allocated to improvements
+that have both practical and statistical significance.
+</p>
+
+</div>
+
+<hr>
+
+<h3>
+4. What recommendations would you make to regulators?
+</h3>
+
+<textarea rows="6" cols="80"></textarea>
+
+<br>
+
+<button onclick="toggleAnswer('answer4')">
+Show Suggested Answer
+</button>
+
+<div id="answer4" style="display:none;">
+
+<p>
+Regulators should emphasize transparency, security,
+investor protection, compliance, and auditability.
+These factors help improve trust and encourage safe
+adoption of blockchain-based financial systems.
+</p>
+
+</div>
+
+<hr>
+
+<h3>
+5. Explain how blockchain may improve financial markets.
+</h3>
+
+<textarea rows="6" cols="80"></textarea>
+
+<br>
+
+<button onclick="toggleAnswer('answer5')">
+Show Suggested Answer
+</button>
+
+<div id="answer5" style="display:none;">
+
+<p>
+Blockchain can improve market transparency, reduce
+transaction costs, increase settlement speed, improve
+security, and reduce reliance on intermediaries.
+These benefits may contribute to greater adoption
+and more efficient financial systems.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+const dataset = [
+
+[8,8,7,7,9],
+[7,7,6,6,8],
+[6,6,5,5,6],
+[9,9,8,8,10],
+[5,5,5,4,5],
+[8,7,8,7,8],
+[7,8,7,6,8],
+[4,4,4,4,4],
+[9,8,9,8,10],
+[6,5,6,5,6],
+[8,9,8,7,9],
+[7,6,7,6,7],
+[5,5,5,5,5],
+[9,9,9,8,10],
+[8,8,7,7,9],
+[6,6,6,5,6],
+[7,7,7,6,8],
+[8,9,8,8,9],
+[4,5,4,4,4],
+[9,8,8,8,10]
+
+];
+
+function gradePhase1(){
+
+let score = 0;
+
+if(
+document.getElementById("outcome").value==="Adoption"
+){
+score++;
+}
+
+if(
+document.getElementById("dv").value==="Adoption"
+){
+score++;
+}
+
+if(
+document.getElementById("ivTransparency").checked &&
+document.getElementById("ivSpeed").checked &&
+document.getElementById("ivSecurity").checked &&
+document.getElementById("ivCost").checked &&
+!document.getElementById("ivAdoption").checked
+){
+score++;
+}
+
+if(
+document.getElementById("method").value==="regression"
+){
+score++;
+}
+
+if(
+document.getElementById("regulator").value==="Security"
+){
+score++;
+}
+
+let percent =
+Math.round((score/5)*100);
+
+let html =
+"<h3>Score: " + percent + "%</h3>";
+
+if(percent >= 80){
+
+html +=
+"<div class='pass'>✅ Dataset Unlocked</div>";
+
+document.getElementById(
+"analysisSection"
+).style.display="block";
+
+}else{
+
+html +=
+"<div class='fail'>❌ Review your answers and try again.</div>";
+
+}
+
+document.getElementById(
+"phaseResults"
+).innerHTML = html;
+
+}
+
+function exportCSV(){
+
+let csv =
+"Transparency,Speed,Security,Cost Reduction,Platform Adoption\n";
+
+dataset.forEach(row=>{
+
+csv += row.join(",") + "\n";
+
+});
+
+let blob =
+new Blob(
+[csv],
+{type:"text/csv"}
+);
+
+let a =
+document.createElement("a");
+
+a.href =
+URL.createObjectURL(blob);
+
+a.download =
+"Dataset5_Blockchain_Securities.csv";
+
+a.click();
+
+}
+
+function toggleAnswer(id){
+
+let answer =
+document.getElementById(id);
+
+if(answer.style.display === "none"){
+
+answer.style.display = "block";
+
+}else{
+
+answer.style.display = "none";
+
+}
+
+}
+
+</script>
+
+</body>
+</html>

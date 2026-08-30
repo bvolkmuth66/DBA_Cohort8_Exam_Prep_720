@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>DBA 720 Practice Lab - Dataset 3</title>
+
+<style>
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f5f7fa;
+    margin:20px;
+}
+
+.card{
+    background:white;
+    padding:20px;
+    margin-bottom:20px;
+    border-radius:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,.1);
+}
+
+h1,h2,h3{
+    color:#17375e;
+}
+
+button{
+    padding:10px;
+    margin:5px;
+    cursor:pointer;
+}
+
+.pass{
+    color:green;
+    font-weight:bold;
+}
+
+.fail{
+    color:red;
+    font-weight:bold;
+}
+
+input,select,textarea{
+    padding:5px;
+    margin-top:5px;
+    margin-bottom:10px;
+}
+
+#analysisSection{
+    display:none;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>DBA 720 Practice Lab</h1>
+
+<div class="card">
+
+<h2>Dataset 3: Cryptocurrency Investment Intentions</h2>
+
+<p>
+Researchers are studying the factors that influence
+an individual's willingness to invest in cryptocurrency.
+</p>
+
+<p>
+Management suspects confidence, knowledge, and risk
+perceptions all play a role.
+</p>
+
+<hr>
+
+<h3>Measure A</h3>
+
+<p>
+The likelihood of investing in cryptocurrency within
+the next six months.
+</p>
+
+<h3>Measure B</h3>
+
+<p>
+Confidence in cryptocurrency markets and exchanges.
+</p>
+
+<h3>Measure C</h3>
+
+<p>
+Understanding of cryptocurrency technology and
+investment principles.
+</p>
+
+<h3>Measure D</h3>
+
+<p>
+Perceived financial uncertainty and potential loss.
+</p>
+
+<hr>
+
+<h3>Question 1</h3>
+
+<p>Which measure is the dependent variable?</p>
+
+<select id="dv">
+
+<option value="">Select</option>
+
+<option value="A">Measure A</option>
+<option value="B">Measure B</option>
+<option value="C">Measure C</option>
+<option value="D">Measure D</option>
+
+</select>
+
+<hr>
+
+<h3>Question 2</h3>
+
+<p>Select all independent variables.</p>
+
+<label><input type="checkbox" id="ivA"> Measure A</label><br>
+<label><input type="checkbox" id="ivB"> Measure B</label><br>
+<label><input type="checkbox" id="ivC"> Measure C</label><br>
+<label><input type="checkbox" id="ivD"> Measure D</label>
+
+<hr>
+
+<h3>Question 3</h3>
+
+<p>Which statistical method should be used?</p>
+
+<select id="method">
+
+<option value="">Select</option>
+
+<option value="correlation">Correlation Analysis</option>
+<option value="regression">Multiple Regression</option>
+<option value="anova">ANOVA</option>
+
+</select>
+
+<hr>
+
+<h3>Question 4</h3>
+
+<p>
+Which predictor would you expect to have the strongest effect?
+</p>
+
+<select id="prediction">
+
+<option value="">Select</option>
+
+<option value="Trust">Trust</option>
+<option value="Knowledge">Knowledge</option>
+<option value="Risk">Risk</option>
+
+</select>
+
+<hr>
+
+<h3>Question 5</h3>
+
+<p>
+Which variable would you expect to have a negative relationship with investment intention?
+</p>
+
+<select id="negativeVar">
+
+<option value="">Select</option>
+
+<option value="Trust">Trust</option>
+<option value="Knowledge">Knowledge</option>
+<option value="Risk">Risk</option>
+
+</select>
+
+<br><br>
+
+<button onclick="gradePhase1()">
+
+Submit Phase 1
+
+</button>
+
+<div id="phaseResults"></div>
+
+</div>
+<div id="analysisSection">
+
+<div class="card">
+
+<h2>Dataset Unlocked</h2>
+
+<p>
+
+Measure A = Investment Intention<br>
+Measure B = Trust<br>
+Measure C = Knowledge<br>
+Measure D = Risk
+
+</p>
+
+<button onclick="exportCSV()">
+
+Download Dataset CSV
+
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>Excel Instructions</h2>
+
+<ol>
+
+<li>Download the dataset.</li>
+<li>Open in Excel.</li>
+<li>Run Descriptive Statistics.</li>
+<li>Run Correlation Analysis.</li>
+<li>Run Multiple Regression.</li>
+
+</ol>
+
+</div>
+
+<div class="card">
+
+<h2>Enter Excel Results</h2>
+
+<label>Investment Intention Mean</label><br>
+<input type="number" step="0.01"><br>
+
+<label>Trust Mean</label><br>
+<input type="number" step="0.01"><br>
+
+<label>Knowledge Mean</label><br>
+<input type="number" step="0.01"><br>
+
+<label>Risk Mean</label><br>
+<input type="number" step="0.01"><br>
+
+</div>
+
+<div class="card">
+
+<h2>Interpretation Questions</h2>
+
+<h3>1. Which variable was the strongest predictor?</h3>
+
+<textarea rows="4" cols="80"></textarea>
+
+<button onclick="toggleAnswer('answer1')">
+
+Show Suggested Answer
+
+</button>
+
+<div id="answer1" style="display:none;">
+
+<p>
+The strongest predictor is the variable with the
+largest statistically significant regression coefficient.
+</p>
+
+</div>
+
+<h3>2. Which variable showed a negative relationship?</h3>
+
+<textarea rows="4" cols="80"></textarea>
+
+<button onclick="toggleAnswer('answer2')">
+
+Show Suggested Answer
+
+</button>
+
+<div id="answer2" style="display:none;">
+
+<p>
+Risk is expected to demonstrate a negative relationship with investment intention.
+</p>
+
+</div>
+
+</div>
+
+</div>
+<script>
+
+const dataset = [
+
+[8,7,8,3],
+[7,6,7,4],
+[4,4,5,6],
+[9,8,9,2],
+[3,3,4,7],
+[8,6,8,3],
+[5,5,6,5],
+[2,2,3,8],
+[10,9,9,2],
+[4,4,5,6],
+[9,8,8,3],
+[5,5,6,5],
+[3,3,4,7],
+[9,8,9,2],
+[8,7,7,4],
+[4,4,5,6],
+[6,6,6,5],
+[8,7,8,3],
+[2,2,3,8],
+[9,8,9,2]
+
+];
+
+function gradePhase1(){
+
+    let score = 0;
+
+    if(document.getElementById("dv").value==="A"){
+        score++;
+    }
+
+    if(
+        !document.getElementById("ivA").checked &&
+        document.getElementById("ivB").checked &&
+        document.getElementById("ivC").checked &&
+        document.getElementById("ivD").checked
+    ){
+        score++;
+    }
+
+    if(document.getElementById("method").value==="regression"){
+        score++;
+    }
+
+    if(document.getElementById("negativeVar").value==="Risk"){
+        score++;
+    }
+
+    let percent =
+    Math.round((score/4)*100);
+
+    let html =
+    "<h3>Score: " + percent + "%</h3>";
+
+    if(percent>=75){
+
+        html +=
+        "<div class='pass'>✅ Dataset Unlocked</div>";
+
+        document.getElementById(
+        "analysisSection"
+        ).style.display="block";
+
+    }else{
+
+        html +=
+        "<div class='fail'>❌ Review your answers</div>";
+
+    }
+
+    document.getElementById(
+    "phaseResults"
+    ).innerHTML=html;
+
+}
+
+function exportCSV(){
+
+    let csv =
+    "Investment Intention,Trust,Knowledge,Risk\n";
+
+    dataset.forEach(row=>{
+
+        csv += row.join(",") + "\n";
+
+    });
+
+    let blob =
+    new Blob([csv],{type:"text/csv"});
+
+    let a =
+    document.createElement("a");
+
+    a.href =
+    URL.createObjectURL(blob);
+
+    a.download =
+    "Dataset3_Crypto_Investment.csv";
+
+    a.click();
+
+}
+
+function toggleAnswer(id){
+
+    let answer =
+    document.getElementById(id);
+
+    if(answer.style.display==="none"){
+
+        answer.style.display="block";
+
+    }else{
+
+        answer.style.display="none";
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>DBA 720 Practice Lab - Dataset 1</title>
+
+<style>
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f5f7fa;
+    margin:20px;
+}
+
+.card{
+    background:white;
+    padding:20px;
+    margin-bottom:20px;
+    border-radius:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,.1);
+}
+
+h1,h2,h3{
+    color:#17375e;
+}
+
+button{
+    padding:10px 15px;
+    margin:5px;
+    cursor:pointer;
+}
+
+table{
+    border-collapse:collapse;
+    width:100%;
+}
+
+th,td{
+    border:1px solid #ccc;
+    padding:6px;
+    text-align:center;
+}
+
+th{
+    background:#17375e;
+    color:white;
+}
+
+#analysisSection{
+    display:none;
+}
+
+.pass{
+    color:green;
+    font-weight:bold;
+}
+
+.fail{
+    color:red;
+    font-weight:bold;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>DBA 720 Practice Lab</h1>
+
+<div class="card">
+
+<h2>Dataset 1: Variable Identification Phase</h2>
+
+<p>
+A blockchain software company is concerned that many users create
+accounts but fail to become long-term active users.
+</p>
+
+<p>
+Management surveyed customers and collected four measurements.
+The goal is to determine what influences continued platform use.
+</p>
+
+<hr>
+
+<h3>Measure A</h3>
+
+<p>
+The degree to which a user believes the platform is reliable,
+honest, and dependable.
+</p>
+
+<h3>Measure B</h3>
+
+<p>
+The degree to which a user believes their information and digital
+assets are protected.
+</p>
+
+<h3>Measure C</h3>
+
+<p>
+The degree to which a user feels the platform is easy to learn
+and operate.
+</p>
+
+<h3>Measure D</h3>
+
+<p>
+The likelihood that a user plans to continue using the platform.
+</p>
+
+<hr>
+
+<h3>Question 1</h3>
+
+<p>Which measure is the dependent variable?</p>
+
+<select id="dv">
+
+<option value="">Select</option>
+<option>A</option>
+<option>B</option>
+<option>C</option>
+<option>D</option>
+
+</select>
+
+<hr>
+
+<h3>Question 2</h3>
+
+<p>Select all independent variables.</p>
+
+<label><input type="checkbox" id="ivA"> Measure A</label><br>
+<label><input type="checkbox" id="ivB"> Measure B</label><br>
+<label><input type="checkbox" id="ivC"> Measure C</label><br>
+<label><input type="checkbox" id="ivD"> Measure D</label><br>
+
+<hr>
+
+<h3>Question 3</h3>
+
+<p>
+Which statistical method is most appropriate?
+</p>
+
+<select id="method">
+
+<option value="">Select</option>
+<option value="correlation">Correlation</option>
+<option value="regression">Multiple Regression</option>
+<option value="anova">ANOVA</option>
+
+</select>
+
+<br><br>
+
+<button onclick="gradePhase1()">
+
+Submit Phase 1
+
+</button>
+
+<div id="phaseResults"></div>
+
+</div>
+
+<div id="analysisSection">
+
+<div class="card">
+
+<h2>Dataset Unlocked</h2>
+
+<p>
+
+Measure A = Trust<br>
+Measure B = Security<br>
+Measure C = Ease of Use<br>
+Measure D = Adoption Intention
+
+</p>
+
+<button onclick="exportCSV()">
+
+Export CSV
+
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>Dataset</h2>
+
+<div id="datasetTable"></div>
+
+</div>
+
+<div class="card">
+
+<h2>Descriptive Statistics</h2>
+
+<button onclick="calculateStats()">
+
+Calculate Statistics
+
+</button>
+
+<div id="statsOutput"></div>
+
+</div>
+
+<div class="card">
+
+<h2>Correlation Matrix</h2>
+
+<button onclick="calculateCorrelation()">
+
+Calculate Correlations
+
+</button>
+
+<div id="corrOutput"></div>
+
+</div>
+<div class="card" id="excelSection">
+
+<h2>Phase 3: Excel Results Entry</h2>
+
+<p>
+Run the analysis in Excel first, then enter your results below.
+</p>
+
+<h3>Means</h3>
+
+<label>Trust Mean</label><br>
+<input type="number" step="0.01" id="meanTrust"><br><br>
+
+<label>Security Mean</label><br>
+<input type="number" step="0.01" id="meanSecurity"><br><br>
+
+<label>Ease of Use Mean</label><br>
+<input type="number" step="0.01" id="meanEase"><br><br>
+
+<label>Adoption Mean</label><br>
+<input type="number" step="0.01" id="meanAdoption"><br><br>
+
+<hr>
+
+<h3>Correlations to Adoption</h3>
+
+<label>Trust → Adoption</label><br>
+<input type="number" step="0.01" id="corrTrust"><br><br>
+
+<label>Security → Adoption</label><br>
+<input type="number" step="0.01" id="corrSecurity"><br><br>
+
+<label>Ease of Use → Adoption</label><br>
+<input type="number" step="0.01" id="corrEase"><br><br>
+
+<hr>
+
+<h3>Regression Results</h3>
+
+<label>R²</label><br>
+<input type="number" step="0.01" id="r2"><br><br>
+
+<label>Strongest Predictor</label><br>
+
+<select id="strongestPredictor">
+
+<option value="">Select</option>
+<option value="Trust">Trust</option>
+<option value="Security">Security</option>
+<option value="Ease of Use">Ease of Use</option>
+
+</select>
+
+<br><br>
+
+<button onclick="gradeExcelSection()">
+Grade Excel Results
+</button>
+
+<div id="excelResults"></div>
+
+</div>
+
+
+</div>
+
+<script>
+
+const data = [
+
+[6,6,5,7],
+[5,5,5,6],
+[4,5,4,5],
+[7,7,6,8],
+[3,4,3,4],
+[6,5,6,7],
+[5,6,5,6],
+[2,3,2,3],
+[7,6,7,8],
+[4,4,4,5],
+[6,7,6,8],
+[5,5,4,5],
+[3,3,3,3],
+[7,7,7,9],
+[6,6,5,7],
+[4,5,4,5],
+[5,4,5,5],
+[6,7,6,8],
+[2,2,3,2],
+[7,6,6,8]
+
+];
+
+const columns = [
+
+"Trust",
+"Security",
+"Ease of Use",
+"Adoption Intention"
+
+];
+
+function gradePhase1(){
+
+let score=0;
+
+if(document.getElementById("dv").value==="D")
+score++;
+
+if(
+document.getElementById("ivA").checked &&
+document.getElementById("ivB").checked &&
+document.getElementById("ivC").checked &&
+!document.getElementById("ivD").checked
+){
+score++;
+}
+
+if(
+document.getElementById("method").value==="regression"
+){
+score++;
+}
+
+let percent=Math.round(score/3*100);
+
+let html="<h3>Score: "+percent+"%</h3>";
+
+if(percent>=80){
+
+html+="<div class='pass'>✅ Dataset Unlocked</div>";
+
+document.getElementById(
+"analysisSection"
+).style.display="block";
+
+renderDataset();
+
+}else{
+
+html+="<div class='fail'>❌ Review your answers and try again.</div>";
+
+}
+
+document.getElementById(
+"phaseResults"
+).innerHTML=html;
+
+}
+
+function renderDataset(){
+
+let html="<table><tr>";
+
+columns.forEach(c=>{
+
+html+="<th>"+c+"</th>";
+
+});
+
+html+="</tr>";
+
+data.forEach(r=>{
+
+html+="<tr>";
+
+r.forEach(v=>{
+
+html+="<td>"+v+"</td>";
+
+});
+
+html+="</tr>";
+
+});
+
+html+="</table>";
+
+document.getElementById(
+"datasetTable"
+).innerHTML=html;
+
+}
+
+function mean(a){
+
+return a.reduce((x,y)=>x+y,0)/a.length;
+
+}
+
+function median(a){
+
+let b=[...a].sort((a,b)=>a-b);
+
+let m=Math.floor(b.length/2);
+
+return b.length%2
+? b[m]
+: (b[m-1]+b[m])/2;
+
+}
+
+function sd(a){
+
+let m=mean(a);
+
+let variance=
+a.reduce(
+(x,y)=>x+Math.pow(y-m,2),
+0
+)/(a.length-1);
+
+return Math.sqrt(variance);
+
+}
+
+function calculateStats(){
+
+let html="<table>";
+
+html+="<tr>";
+
+html+="<th>Variable</th>";
+html+="<th>Mean</th>";
+html+="<th>Median</th>";
+html+="<th>Std Dev</th>";
+
+html+="</tr>";
+
+for(let i=0;i<columns.length;i++){
+
+let col=data.map(r=>r[i]);
+
+html+="<tr>";
+
+html+="<td>"+columns[i]+"</td>";
+
+html+="<td>"+mean(col).toFixed(2)+"</td>";
+
+html+="<td>"+median(col).toFixed(2)+"</td>";
+
+html+="<td>"+sd(col).toFixed(2)+"</td>";
+
+html+="</tr>";
+
+}
+
+html+="</table>";
+
+document.getElementById(
+"statsOutput"
+).innerHTML=html;
+
+}
+
+function corr(x,y){
+
+let mx=mean(x);
+let my=mean(y);
+
+let num=0;
+let dx=0;
+let dy=0;
+
+for(let i=0;i<x.length;i++){
+
+num+=(x[i]-mx)*(y[i]-my);
+
+dx+=Math.pow(x[i]-mx,2);
+
+dy+=Math.pow(y[i]-my,2);
+
+}
+
+return num/Math.sqrt(dx*dy);
+
+}
+
+function calculateCorrelation(){
+
+let html="<table><tr><th></th>";
+
+columns.forEach(c=>{
+
+html+="<th>"+c+"</th>";
+
+});
+
+html+="</tr>";
+
+for(let i=0;i<columns.length;i++){
+
+html+="<tr>";
+
+html+="<th>"+columns[i]+"</th>";
+
+for(let j=0;j<columns.length;j++){
+
+let c1=data.map(r=>r[i]);
+
+let c2=data.map(r=>r[j]);
+
+html+="<td>"+corr(c1,c2).toFixed(3)+"</td>";
+
+}
+
+html+="</tr>";
+
+}
+
+html+="</table>";
+
+document.getElementById(
+"corrOutput"
+).innerHTML=html;
+
+}
+
+function exportCSV(){
+
+let csv=columns.join(",")+"\n";
+
+data.forEach(r=>{
+
+csv+=r.join(",")+"\n";
+
+});
+
+let blob=new Blob(
+[csv],
+{type:"text/csv"}
+);
+
+let a=document.createElement("a");
+
+a.href=
+URL.createObjectURL(blob);
+
+a.download=
+"Dataset1_Blockchain_Adoption.csv";
+
+a.click();
+
+}
+function withinTolerance(student, answer){
+
+    return Math.abs(student - answer) <= 0.02;
+
+}
+
+function gradeExcelSection(){
+
+    let score = 0;
+    let total = 8;
+
+    const answers = {
+
+        meanTrust: 5.00,
+        meanSecurity: 5.15,
+        meanEase: 4.80,
+        meanAdoption: 5.95,
+
+        corrTrust: 0.964,
+        corrSecurity: 0.946,
+        corrEase: 0.943,
+
+        r2: 0.976,
+
+        strongestPredictor: "Security"
+
+    };
+
+    let html = "<h3>Excel Analysis Results</h3><ul>";
+
+    // Trust Mean
+    if(
+        withinTolerance(
+            Number(document.getElementById("meanTrust").value),
+            answers.meanTrust
+        )
+    ){
+        score++;
+        html += "<li>✅ Trust Mean Correct</li>";
+    } else {
+        html += "<li>❌ Trust Mean Incorrect</li>";
+    }
+
+    // Security Mean
+    if(
+        withinTolerance(
+            Number(document.getElementById("meanSecurity").value),
+            answers.meanSecurity
+        )
+    ){
+        score++;
+        html += "<li>✅ Security Mean Correct</li>";
+    } else {
+        html += "<li>❌ Security Mean Incorrect</li>";
+    }
+
+    // Ease Mean
+    if(
+        withinTolerance(
+            Number(document.getElementById("meanEase").value),
+            answers.meanEase
+        )
+    ){
+        score++;
+        html += "<li>✅ Ease of Use Mean Correct</li>";
+    } else {
+        html += "<li>❌ Ease of Use Mean Incorrect</li>";
+    }
+
+    // Adoption Mean
+    if(
+        withinTolerance(
+            Number(document.getElementById("meanAdoption").value),
+            answers.meanAdoption
+        )
+    ){
+        score++;
+        html += "<li>✅ Adoption Mean Correct</li>";
+    } else {
+        html += "<li>❌ Adoption Mean Incorrect</li>";
+    }
+
+    // Trust Correlation
+    if(
+        withinTolerance(
+            Number(document.getElementById("corrTrust").value),
+            answers.corrTrust
+        )
+    ){
+        score++;
+        html += "<li>✅ Trust → Adoption Correlation Correct</li>";
+    } else {
+        html += "<li>❌ Trust → Adoption Correlation Incorrect</li>";
+    }
+
+    // Security Correlation
+    if(
+        withinTolerance(
+            Number(document.getElementById("corrSecurity").value),
+            answers.corrSecurity
+        )
+    ){
+        score++;
+        html += "<li>✅ Security → Adoption Correlation Correct</li>";
+    } else {
+        html += "<li>❌ Security → Adoption Correlation Incorrect</li>";
+    }
+
+    // Ease Correlation
+    if(
+        withinTolerance(
+            Number(document.getElementById("corrEase").value),
+            answers.corrEase
+        )
+    ){
+        score++;
+        html += "<li>✅ Ease of Use → Adoption Correlation Correct</li>";
+    } else {
+        html += "<li>❌ Ease of Use → Adoption Correlation Incorrect</li>";
+    }
+
+    // R-Squared
+    if(
+        withinTolerance(
+            Number(document.getElementById("r2").value),
+            answers.r2
+        )
+    ){
+        score++;
+        html += "<li>✅ R² Correct</li>";
+    } else {
+        html += "<li>❌ R² Incorrect</li>";
+    }
+
+    html += "</ul>";
+
+    // Strongest Predictor
+    if(
+        document.getElementById("strongestPredictor").value
+        === answers.strongestPredictor
+    ){
+
+        html +=
+        "<p>✅ Strongest Predictor Correct (Security)</p>";
+
+    } else {
+
+        html +=
+        "<p>❌ Strongest Predictor Incorrect</p>";
+
+    }
+
+    let percent =
+    Math.round(
+        (score/total) * 100
+    );
+
+    html +=
+    "<h3>Score: " +
+    percent +
+    "%</h3>";
+
+    if(percent >= 80){
+
+        html += `
+        <div style="
+            color:green;
+            font-weight:bold;
+            font-size:18px;">
+            PASS
+        </div>
+
+        <p>
+        Excellent work. Your Excel analysis closely matches
+        the expected results.
+        </p>
+        `;
+
+    } else {
+
+        html += `
+        <div style="
+            color:red;
+            font-weight:bold;
+            font-size:18px;">
+            REVIEW RESULTS
+        </div>
+
+        <p>
+        Re-run the Excel analyses and compare your values to
+        the output.
+        </p>
+        `;
+
+    }
+
+    html += `
+    <hr>
+
+    <h3>Key Learning Point</h3>
+
+    <p>
+    Trust had the strongest correlation with Adoption
+    (r = 0.964), but Security was the strongest predictor
+    in the regression model (β = 0.589).
+    </p>
+
+    <p>
+    This demonstrates that the strongest correlation is not
+    always the strongest predictor when multiple variables
+    are analyzed simultaneously.
+    </p>
+    `;
+
+    document.getElementById(
+        "excelResults"
+    ).innerHTML = html;
+
+}
+</script>
+
+</body>
+</html>
