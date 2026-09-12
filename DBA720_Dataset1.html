@@ -577,31 +577,31 @@ a.click();
 }
 function withinTolerance(student, answer){
 
-    return Math.abs(student - answer) <= 0.02;
+    return Math.abs(student - answer) <= 0.05;
 
 }
 
 function gradeExcelSection(){
 
     let score = 0;
-    let total = 8;
+    let total = 9;
 
     const answers = {
 
-    meanTrust: 5.15,
-    meanSecurity: 5.85,
-    meanEase: 5.50,
-    meanAdoption: 6.05,
+        meanTrust: 5.12,
+        meanSecurity: 5.88,
+        meanEase: 5.56,
+        meanAdoption: 6.04,
 
-    corrTrust: 0.976,
-    corrSecurity: 0.956,
-    corrEase: 0.826,
+        corrTrust: 0.976,
+        corrSecurity: 0.956,
+        corrEase: 0.826,
 
-    r2: 0.981,
+        r2: 0.981,
 
-    strongestPredictor: "Trust"
+        strongestPredictor: "Trust"
+    };
 
-};
 
     let html = "<h3>Excel Analysis Results</h3><ul>";
 
@@ -712,21 +712,20 @@ function gradeExcelSection(){
     html += "</ul>";
 
     // Strongest Predictor
-    if(
-        document.getElementById("strongestPredictor").value
-        === answers.strongestPredictor
-    ){
+   if(
+    document.getElementById("strongestPredictor").value
+    === answers.strongestPredictor
+){
 
-        html +=
-        "<p>✅ Strongest Predictor Correct (Security)</p>";
+    html +=
+    "<p>✅ Strongest Predictor Correct (Security)</p>";
 
-    } else {
+} else {
 
-        html +=
-        "<p>❌ Strongest Predictor Incorrect</p>";
+    html +=
+    "<p>❌ Strongest Predictor Incorrect</p>";
 
-    }
-
+}
     let percent =
     Math.round(
         (score/total) * 100
