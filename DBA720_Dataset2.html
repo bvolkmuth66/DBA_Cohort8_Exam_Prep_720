@@ -542,6 +542,190 @@ function toggleAnswer(id){
     }
 
 }
+    function withinTolerance(student, answer){
+    return Math.abs(student - answer) <= 0.05;
+}
+
+function gradeExcelSection(){
+
+    let score = 0;
+    let total = 11;
+
+    const answers = {
+
+        meanCost: 5.40,
+        meanTransparency: 6.48,
+        meanEfficiency: 6.00,
+        meanSatisfaction: 6.60,
+
+        corrCost: 0.599,
+        corrTransparency: 0.949,
+        corrEfficiency: 0.745,
+
+        multipleR: 0.983,
+        r2: 0.965,
+        adjR2: 0.960,
+
+        strongestPredictor: "Transparency"
+    };
+
+    let html =
+    "<h3>Excel Analysis Results</h3><ul>";
+
+    if(withinTolerance(
+        Number(document.getElementById("meanCost").value),
+        answers.meanCost
+    )){
+        score++;
+        html += "<li>✅ Cost Reduction Mean Correct</li>";
+    } else {
+        html += "<li>❌ Cost Reduction Mean Incorrect</li>";
+    }
+
+    if(withinTolerance(
+        Number(document.getElementById("meanTransparency").value),
+        answers.meanTransparency
+    )){
+        score++;
+        html += "<li>✅ Transparency Mean Correct</li>";
+    } else {
+        html += "<li>❌ Transparency Mean Incorrect</li>";
+    }
+
+    if(withinTolerance(
+        Number(document.getElementById("meanEfficiency").value),
+        answers.meanEfficiency
+    )){
+        score++;
+        html += "<li>✅ Efficiency Mean Correct</li>";
+    } else {
+        html += "<li>❌ Efficiency Mean Incorrect</li>";
+    }
+
+    if(withinTolerance(
+        Number(document.getElementById("meanSatisfaction").value),
+        answers.meanSatisfaction
+    )){
+        score++;
+        html += "<li>✅ Satisfaction Mean Correct</li>";
+    } else {
+        html += "<li>❌ Satisfaction Mean Incorrect</li>";
+    }
+
+    if(withinTolerance(
+        Number(document.getElementById("corrCost").value),
+        answers.corrCost
+    )){
+        score++;
+        html += "<li>✅ Cost Reduction Correlation Correct</li>";
+    } else {
+        html += "<li>❌ Cost Reduction Correlation Incorrect</li>";
+    }
+
+    if(withinTolerance(
+        Number(document.getElementById("corrTransparency").value),
+        answers.corrTransparency
+    )){
+        score++;
+        html += "<li>✅ Transparency Correlation Correct</li>";
+    } else {
+        html += "<li>❌ Transparency Correlation Incorrect</li>";
+    }
+
+    if(withinTolerance(
+        Number(document.getElementById("corrEfficiency").value),
+        answers.corrEfficiency
+    )){
+        score++;
+        html += "<li>✅ Efficiency Correlation Correct</li>";
+    } else {
+        html += "<li>❌ Efficiency Correlation Incorrect</li>";
+    }
+
+    if(withinTolerance(
+        Number(document.getElementById("multipleR").value),
+        answers.multipleR
+    )){
+        score++;
+        html += "<li>✅ Multiple R Correct</li>";
+    } else {
+        html += "<li>❌ Multiple R Incorrect</li>";
+    }
+
+    if(withinTolerance(
+        Number(document.getElementById("r2").value),
+        answers.r2
+    )){
+        score++;
+        html += "<li>✅ R² Correct</li>";
+    } else {
+        html += "<li>❌ R² Incorrect</li>";
+    }
+
+    if(withinTolerance(
+        Number(document.getElementById("adjR2").value),
+        answers.adjR2
+    )){
+        score++;
+        html += "<li>✅ Adjusted R² Correct</li>";
+    } else {
+        html += "<li>❌ Adjusted R² Incorrect</li>";
+    }
+
+    html += "</ul>";
+
+    if(
+        document.getElementById("strongestPredictor").value
+        === answers.strongestPredictor
+    ){
+        score++;
+
+        html +=
+        "<p>✅ Strongest Predictor Correct (Transparency)</p>";
+
+    } else {
+
+        html +=
+        "<p>❌ Strongest Predictor Incorrect</p>";
+    }
+
+    let percent =
+    Math.round((score / total) * 100);
+
+    html +=
+    "<h3>Score: " + percent + "%</h3>";
+
+    if(percent >= 80){
+
+        html +=
+        "<div style='color:green;font-weight:bold;font-size:18px;'>PASS</div>";
+
+    } else {
+
+        html +=
+        "<div style='color:red;font-weight:bold;font-size:18px;'>REVIEW RESULTS</div>";
+    }
+
+    html += `
+    <hr>
+
+    <h3>Key Learning Point</h3>
+
+    <p>
+    Transparency was the strongest predictor of customer satisfaction.
+    It had the highest correlation with Satisfaction (r = .949)
+    and the largest statistically significant regression coefficient.
+    </p>
+
+    <p>
+    Transparency and Efficiency were significant predictors,
+    while Cost Reduction was not statistically significant after
+    controlling for the other variables.
+    </p>
+    `;
+
+    document.getElementById("excelResults").innerHTML = html;
+}
 </script>
 </body>
 </html>
