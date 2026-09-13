@@ -459,17 +459,47 @@ function gradeExcelSection(){
     };
 
     let html =
-    "<h3>Excel Analysis Results</h3><ul>";
+"<h3>Excel Analysis Results</h3><ul>";
 
-       if(withinTolerance(
-        Number(document.getElementById("meanRisk").value),
-        answers.meanRisk
-    )){
-        score++;
-        html += "<li>✅ Risk Mean Correct</li>";
-    } else {
-        html += "<li>❌ Risk Mean Incorrect</li>";
-    }
+if(withinTolerance(
+    Number(document.getElementById("meanInvestment").value),
+    answers.meanInvestment
+)){
+    score++;
+    html += "<li>✅ Investment Mean Correct</li>";
+} else {
+    html += "<li>❌ Investment Mean Incorrect</li>";
+}
+
+if(withinTolerance(
+    Number(document.getElementById("meanTrust").value),
+    answers.meanTrust
+)){
+    score++;
+    html += "<li>✅ Trust Mean Correct</li>";
+} else {
+    html += "<li>❌ Trust Mean Incorrect</li>";
+}
+
+if(withinTolerance(
+    Number(document.getElementById("meanKnowledge").value),
+    answers.meanKnowledge
+)){
+    score++;
+    html += "<li>✅ Knowledge Mean Correct</li>";
+} else {
+    html += "<li>❌ Knowledge Mean Incorrect</li>";
+}
+
+if(withinTolerance(
+    Number(document.getElementById("meanRisk").value),
+    answers.meanRisk
+)){
+    score++;
+    html += "<li>✅ Risk Mean Correct</li>";
+} else {
+    html += "<li>❌ Risk Mean Incorrect</li>";
+}
 
     if(withinTolerance(
         Number(document.getElementById("corrTrust").value),
