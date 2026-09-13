@@ -459,39 +459,114 @@ function gradeExcelSection(){
     let html =
     "<h3>Excel Analysis Results</h3><ul>";
 
-    if(withinTolerance(
-        Number(document.getElementById("meanInvestment").value),
-        answers.meanInvestment
+       if(withinTolerance(
+        Number(document.getElementById("meanRisk").value),
+        answers.meanRisk
     )){
         score++;
-        html += "<li>✅ Investment Mean Correct</li>";
+        html += "<li>✅ Risk Mean Correct</li>";
     } else {
-        html += "<li>❌ Investment Mean Incorrect</li>";
+        html += "<li>❌ Risk Mean Incorrect</li>";
     }
 
     if(withinTolerance(
-        Number(document.getElementById("meanTrust").value),
-        answers.meanTrust
+        Number(document.getElementById("corrTrust").value),
+        answers.corrTrust
     )){
         score++;
-        html += "<li>✅ Trust Mean Correct</li>";
+        html += "<li>✅ Trust Correlation Correct</li>";
     } else {
-        html += "<li>❌ Trust Mean Incorrect</li>";
+        html += "<li>❌ Trust Correlation Incorrect</li>";
     }
 
     if(withinTolerance(
-        Number(document.getElementById("meanKnowledge").value),
-        answers.meanKnowledge
+        Number(document.getElementById("corrKnowledge").value),
+        answers.corrKnowledge
     )){
         score++;
-        html += "<li>✅ Knowledge Mean Correct</li>";
+        html += "<li>✅ Knowledge Correlation Correct</li>";
     } else {
-        html += "<li>❌ Knowledge Mean Incorrect</li>";
+        html += "<li>❌ Knowledge Correlation Incorrect</li>";
     }
 
     if(withinTolerance(
+        Number(document.getElementById("corrRisk").value),
+        answers.corrRisk
+    )){
+        score++;
+        html += "<li>✅ Risk Correlation Correct</li>";
+    } else {
+        html += "<li>❌ Risk Correlation Incorrect</li>";
+    }
 
-</script>
+    html += "</ul>";
 
-</body>
-</html>
+    if(
+        document.getElementById("strongestPredictor").value
+        === answers.strongestPredictor
+    ){
+        score++;
+
+        html +=
+        "<p>✅ Strongest Predictor Correct (Trust)</p>";
+
+    } else {
+
+        html +=
+        "<p>❌ Strongest Predictor Incorrect</p>";
+    }
+
+    let percent =
+    Math.round((score / total) * 100);
+
+    html +=
+    "<h3>Score: " + percent + "%</h3>";
+
+    if(percent >= 80){
+
+        html +=
+        "<div style='color:green;font-weight:bold;font-size:18px;'>PASS</div>";
+
+    } else {
+
+        html +=
+        "<div style='color:red;font-weight:bold;font-size:18px;'>REVIEW RESULTS</div>";
+    }
+
+    html += `
+    <hr>
+
+    <h3>Key Learning Point</h3>
+
+    <p>
+    Trust demonstrated the strongest positive relationship
+    with Investment Intention.
+    </p>
+
+    <p>
+    Risk showed a strong negative relationship with
+    Investment Intention, indicating that increased
+    perceived risk reduces willingness to invest.
+    </p>
+    `;
+
+    document.getElementById(
+        "excelResults"
+    ).innerHTML = html;
+}
+
+function toggleAnswer(id){
+
+    let answer =
+    document.getElementById(id);
+
+    if(answer.style.display==="none"){
+
+        answer.style.display="block";
+
+    }else{
+
+        answer.style.display="none";
+
+    }
+}
