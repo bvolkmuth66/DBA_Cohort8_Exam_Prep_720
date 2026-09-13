@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title>DBA 720 Practice Lab - Dataset 4</title>
+<title>DBA 720 Practice Lab Dataset 4</title>
 
 <style>
 
@@ -70,7 +70,7 @@ Dataset 4: Cryptocurrency Wallet User Experience
 
 <p>
 A cryptocurrency wallet provider is experiencing
-slower-than-expected growth in active users.
+slower than expected growth in active users.
 </p>
 
 <p>
@@ -409,13 +409,13 @@ factors most strongly influence continued wallet usage.
 
 <option value="">Select</option>
 
-<option>Perspicuity</option>
+<option value="Perspicuity">Perspicuity</option>
 
-<option>Efficiency</option>
+<option value="Efficiency">Efficiency</option>
 
-<option>Dependability</option>
+<option value="Dependability">Dependability</option>
 
-<option>Trust</option>
+<option value="Trust">Trust</option>
 
 </select>
 
@@ -459,7 +459,7 @@ Grade Excel Results
 
 <div class="card">
 
-<h2>Pre-Interpretation Reflection</h2>
+<h2>Pre Interpretation Reflection</h2>
 
 <h3>
 Before reviewing your regression results:
@@ -771,11 +771,11 @@ const checks = [
 
 checks.forEach(item => {
 
+let inputElement = document.getElementById(item[0]);
+
 if(
-withinTolerance(
-Number(document.getElementById(item[0]).value),
-item[1]
-)
+inputElement.value !== "" &&
+withinTolerance(Number(inputElement.value), item[1])
 ){
 score++;
 html += "<li>✅ " + item[2] + "</li>";
@@ -796,8 +796,8 @@ html += "<li>❌ Strongest Predictor</li>";
 }
 
 if(
-!document.getElementById("sigPerspicuity").checked &&
-document.getElementById("sigEfficiency").checked &&
+document.getElementById("sigPerspicuity").checked &&
+!document.getElementById("sigEfficiency").checked &&
 !document.getElementById("sigDependability").checked &&
 !document.getElementById("sigTrust").checked
 ){
@@ -849,3 +849,8 @@ answer.style.display="none";
 }
 
 }
+
+</script>
+
+</body>
+</html>
