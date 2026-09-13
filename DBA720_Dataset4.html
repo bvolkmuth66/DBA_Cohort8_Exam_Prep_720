@@ -358,54 +358,57 @@ factors most strongly influence continued wallet usage.
 <h3>Descriptive Statistics</h3>
 
 <label>Perspicuity Mean</label><br>
-<input type="number" step="0.01"><br>
+<input type="number" step="0.01" id="meanPerspicuity"><br>
 
 <label>Efficiency Mean</label><br>
-<input type="number" step="0.01"><br>
+<input type="number" step="0.01" id="meanEfficiency"><br>
 
 <label>Dependability Mean</label><br>
-<input type="number" step="0.01"><br>
+<input type="number" step="0.01" id="meanDependability"><br>
 
 <label>Trust Mean</label><br>
-<input type="number" step="0.01"><br>
+<input type="number" step="0.01" id="meanTrust"><br>
 
 <label>Behavioral Intention Mean</label><br>
-<input type="number" step="0.01"><br>
+<input type="number" step="0.01" id="meanBehavioralIntention"><br>
 
 <hr>
 
 <h3>Correlations with Behavioral Intention</h3>
 
 <label>Perspicuity → Behavioral Intention</label><br>
-<input type="number" step="0.01"><br>
+<input type="number" step="0.01" id="corrPerspicuity"><br>
 
 <label>Efficiency → Behavioral Intention</label><br>
-<input type="number" step="0.01"><br>
+<input type="number" step="0.01" id="corrEfficiency"><br>
 
 <label>Dependability → Behavioral Intention</label><br>
-<input type="number" step="0.01"><br>
+<input type="number" step="0.01" id="corrDependability"><br>
 
 <label>Trust → Behavioral Intention</label><br>
-<input type="number" step="0.01"><br>
+<input type="number" step="0.01" id="corrTrust"><br>
 
 <hr>
 
 <h3>Regression Results</h3>
 
-<label>Multiple R</label><br>
-<input type="number" step="0.01"><br>
+<label>Trust → Behavioral Intention</label><br>
+<input type="number" step="0.01" id="corrTrust"><br>
 
 <label>R²</label><br>
-<input type="number" step="0.01"><br>
+<input type="number" step="0.01" id="rSquare"><br>
 
 <label>Adjusted R²</label><br>
-<input type="number" step="0.01"><br>
+<input type="number" step="0.01" id="adjustedRSquare"><br>
+    
+<label>Multiple R</label><br>
+<input type="number" step="0.01" id="multipleR"><br>
 
 <hr>
 
 <label>Strongest Predictor</label><br>
 
-<select>
+<select id="strongestPredictor">
 
 <option value="">Select</option>
 
@@ -428,24 +431,32 @@ Select all variables that were statistically significant.
 </p>
 
 <label>
-<input type="checkbox">
+<input type="checkbox" id="sigPerspicuity">
 Perspicuity
 </label><br>
 
 <label>
-<input type="checkbox">
+<input type="checkbox" id="sigEfficiency">
 Efficiency
 </label><br>
 
 <label>
-<input type="checkbox">
+<input type="checkbox" id="sigDependability">
 Dependability
 </label><br>
 
 <label>
-<input type="checkbox">
+<input type="checkbox" id="sigTrust">
 Trust
 </label>
+
+<hr>
+
+<button onclick="gradeExcelSection()">
+Grade Excel Results
+</button>
+
+<div id="excelResults"></div>
 
 </div>
 
@@ -709,6 +720,122 @@ a.click();
 
 }
 
+function withinTolerance(student, answer){
+return Math.abs(student - answer) <= 0.05;
+}
+
+function gradeExcelSection(){
+
+let score = 0;
+let total = 14;
+
+const answers = {
+
+meanPerspicuity: 6.00,
+meanEfficiency: 6.15,
+meanDependability: 6.10,
+meanTrust: 6.95,
+meanBehavioralIntention: 7.55,
+
+corrPerspicuity: 0.983423,
+corrEfficiency: 0.960342,
+corrDependability: 0.948102,
+corrTrust: 0.977299,
+
+multipleR: 0.989171,
+rSquare: 0.978459,
+adjustedRSquare: 0.972715,
+
+strongestPredictor: "Perspicuity"
+
+};
+
+let html =
+"<h3>Excel Results</h3><ul>";
+
+const checks = [
+
+["meanPerspicuity", answers.meanPerspicuity, "Perspicuity Mean"],
+["meanEfficiency", answers.meanEfficiency, "Efficiency Mean"],
+["meanDependability", answers.meanDependability, "Dependability Mean"],
+["meanTrust", answers.meanTrust, "Trust Mean"],
+["meanBehavioralIntention", answers.meanBehavioralIntention, "Behavioral Intention Mean"],
+
+["corrPerspicuity", answers.corrPerspicuity, "Perspicuity Correlation"],
+["corrEfficiency", answers.corrEfficiency, "Efficiency Correlation"],
+["corrDependability", answers.corrDependability, "Dependability Correlation"],
+["corrTrust", answers.corrTrust, "Trust Correlation"],
+
+["multipleR", answers.multipleR, "Multiple R"],
+["rSquare", answers.rSquare, "R Square"],
+["adjustedRSquare", answers.adjustedRSquare, "Adjusted R Square"]
+
+];
+
+checks.forEach(item => {
+
+if(
+withinTolerance(
+Number(document.getElementById(item[0]).value),
+item[1]
+)
+){
+score++;
+html += "<li>✅ " + item[2] + "</li>";
+}else{
+html += "<li>❌ " + item[2] + "</li>";
+}
+
+});
+
+if(
+document.getElementById("strongestPredictor").value
+=== answers.strongestPredictor
+){
+score++;
+html += "<li>✅ Strongest Predictor</li>";
+}else{
+html += "<li>❌ Strongest Predictor</li>";
+}
+
+if(
+!document.getElementById("sigPerspicuity").checked &&
+document.getElementById("sigEfficiency").checked &&
+!document.getElementById("sigDependability").checked &&
+!document.getElementById("sigTrust").checked
+){
+score++;
+html += "<li>✅ Significant Predictors</li>";
+}else{
+html += "<li>❌ Significant Predictors</li>";
+}
+
+html += "</ul>";
+
+let percent =
+Math.round((score / total) * 100);
+
+html +=
+"<h3>Score: " + percent + "%</h3>";
+
+if(percent >= 80){
+
+html +=
+"<div class='pass'>PASS</div>";
+
+}else{
+
+html +=
+"<div class='fail'>REVIEW RESULTS</div>";
+
+}
+
+document.getElementById(
+"excelResults"
+).innerHTML = html;
+
+}
+
 function toggleAnswer(id){
 
 let answer =
@@ -725,8 +852,3 @@ answer.style.display="none";
 }
 
 }
-
-</script>
-
-</body>
-</html>
