@@ -257,62 +257,61 @@ Download Dataset CSV
 <h3>Means</h3>
 
 <label>Cost Reduction Mean</label><br>
-<input type="number" step="0.01"><br>
+<input type="number" step="0.01" id="meanCost"><br><br>
 
 <label>Transparency Mean</label><br>
-<input type="number" step="0.01"><br>
+<input type="number" step="0.01" id="meanTransparency"><br><br>
 
 <label>Efficiency Mean</label><br>
-<input type="number" step="0.01"><br>
+<input type="number" step="0.01" id="meanEfficiency"><br><br>
 
 <label>Satisfaction Mean</label><br>
-<input type="number" step="0.01"><br>
+<input type="number" step="0.01" id="meanSatisfaction"><br><br>
 
 <hr>
 
 <h3>Correlations With Satisfaction</h3>
 
 <label>Cost Reduction → Satisfaction</label><br>
-<input type="number" step="0.01"><br>
+<input type="number" step="0.01" id="corrCost"><br><br>
 
 <label>Transparency → Satisfaction</label><br>
-<input type="number" step="0.01"><br>
+<input type="number" step="0.01" id="corrTransparency"><br><br>
 
 <label>Efficiency → Satisfaction</label><br>
-<input type="number" step="0.01"><br>
+<input type="number" step="0.01" id="corrEfficiency"><br><br>
 
 <hr>
 
 <h3>Regression Results</h3>
 
 <label>Multiple R</label><br>
-<input type="number" step="0.01"><br>
+<input type="number" step="0.01" id="multipleR"><br><br>
 
 <label>R²</label><br>
-<input type="number" step="0.01"><br>
+<input type="number" step="0.01" id="r2"><br><br>
 
 <label>Adjusted R²</label><br>
-<input type="number" step="0.01"><br>
+<input type="number" step="0.01" id="adjR2"><br><br>
 
 <label>Strongest Predictor</label><br>
 
-<select>
-
-<option value="">Select</option>
-
-<option>
-Cost Reduction
-</option>
-
-<option>
-Transparency
-</option>
-
-<option>
-Efficiency
-</option>
-
+<select id="strongestPredictor">
+    <option value="">Select</option>
+    <option value="Cost Reduction">Cost Reduction</option>
+    <option value="Transparency">Transparency</option>
+    <option value="Efficiency">Efficiency</option>
 </select>
+
+<br><br>
+
+<button onclick="gradeExcelSection()">
+    Grade Excel Results
+</button>
+
+<div id="excelResults"></div>
+
+</div>
 
 </div>
 
