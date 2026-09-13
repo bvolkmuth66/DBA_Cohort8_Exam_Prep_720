@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title>DBA 720 Practice Lab - Dataset 5</title>
+<title>DBA 720 Practice Lab Dataset 5</title>
 
 <style>
 
@@ -69,7 +69,7 @@ Dataset 5: Blockchain Securities Trading
 </h2>
 
 <p>
-A financial exchange is evaluating a new blockchain-based
+A financial exchange is evaluating a new blockchain based
 securities trading platform. Management believes adoption
 may depend on several factors including transaction
 transparency, processing speed, security, and transaction
@@ -334,48 +334,48 @@ You should determine:
 <h3>Descriptive Statistics</h3>
 
 <label>Transparency Mean</label><br>
-<input type="number" step="0.01"><br>
+<input type="number" step="0.01" id="meanTransparency"><br>
 
 <label>Processing Speed Mean</label><br>
-<input type="number" step="0.01"><br>
+<input type="number" step="0.01" id="meanSpeed"><br>
 
 <label>Security Mean</label><br>
-<input type="number" step="0.01"><br>
+<input type="number" step="0.01" id="meanSecurity"><br>
 
 <label>Cost Reduction Mean</label><br>
-<input type="number" step="0.01"><br>
+<input type="number" step="0.01" id="meanCost"><br>
 
 <label>Platform Adoption Mean</label><br>
-<input type="number" step="0.01"><br>
+<input type="number" step="0.01" id="meanAdoption"><br>
 
 <hr>
 
 <h3>Correlations with Platform Adoption</h3>
 
 <label>Transparency → Adoption</label><br>
-<input type="number" step="0.01"><br>
+<input type="number" step="0.01" id="corrTransparency"><br>
 
 <label>Processing Speed → Adoption</label><br>
-<input type="number" step="0.01"><br>
+<input type="number" step="0.01" id="corrSpeed"><br>
 
 <label>Security → Adoption</label><br>
-<input type="number" step="0.01"><br>
+<input type="number" step="0.01" id="corrSecurity"><br>
 
 <label>Cost Reduction → Adoption</label><br>
-<input type="number" step="0.01"><br>
+<input type="number" step="0.01" id="corrCost"><br>
 
 <hr>
 
 <h3>Regression Results</h3>
 
 <label>Multiple R</label><br>
-<input type="number" step="0.01"><br>
+<input type="number" step="0.01" id="multipleR"><br>
 
 <label>R²</label><br>
-<input type="number" step="0.01"><br>
+<input type="number" step="0.01" id="rSquare"><br>
 
 <label>Adjusted R²</label><br>
-<input type="number" step="0.01"><br>
+<input type="number" step="0.01" id="adjustedRSquare"><br>
 
 <hr>
 
@@ -431,11 +431,16 @@ Security
 Cost Reduction
 </label>
 
+<hr>
+
+<button onclick="gradeExcelSection()">Grade Excel Results</button>
+<div id="excelResults"></div>
+
 </div>
 
 <div class="card">
 
-<h2>Pre-Interpretation Reflection</h2>
+<h2>Pre Interpretation Reflection</h2>
 
 <h3>
 Before running the regression:
@@ -565,7 +570,7 @@ Show Suggested Answer
 Regulators should emphasize transparency, security,
 investor protection, compliance, and auditability.
 These factors help improve trust and encourage safe
-adoption of blockchain-based financial systems.
+adoption of blockchain based financial systems.
 </p>
 
 </div>
@@ -631,111 +636,138 @@ function gradePhase1(){
 
 let score = 0;
 
+if(document.getElementById("outcome").value==="Adoption"){ score++; }
+if(document.getElementById("dv").value==="Adoption"){ score++; }
 if(
-document.getElementById("outcome").value==="Adoption"
-){
-score++;
-}
+    document.getElementById("ivTransparency").checked &&
+    document.getElementById("ivSpeed").checked &&
+    document.getElementById("ivSecurity").checked &&
+    document.getElementById("ivCost").checked &&
+    !document.getElementById("ivAdoption").checked
+){ score++; }
+if(document.getElementById("method").value==="regression"){ score++; }
+if(document.getElementById("prediction").value !== ""){ score++; }
+if(document.getElementById("regulator").value==="Security"){ score++; }
 
-if(
-document.getElementById("dv").value==="Adoption"
-){
-score++;
-}
-
-if(
-document.getElementById("ivTransparency").checked &&
-document.getElementById("ivSpeed").checked &&
-document.getElementById("ivSecurity").checked &&
-document.getElementById("ivCost").checked &&
-!document.getElementById("ivAdoption").checked
-){
-score++;
-}
-
-if(
-document.getElementById("method").value==="regression"
-){
-score++;
-}
-
-if(
-document.getElementById("regulator").value==="Security"
-){
-score++;
-}
-
-let percent =
-Math.round((score/5)*100);
-
-let html =
-"<h3>Score: " + percent + "%</h3>";
+let percent = Math.round((score/6)*100);
+let html = "<h3>Score: " + percent + "%</h3>";
 
 if(percent >= 80){
-
-html +=
-"<div class='pass'>✅ Dataset Unlocked</div>";
-
-document.getElementById(
-"analysisSection"
-).style.display="block";
-
+    html += "<div class='pass'>✅ Dataset Unlocked</div>";
+    document.getElementById("analysisSection").style.display="block";
 }else{
-
-html +=
-"<div class='fail'>❌ Review your answers and try again.</div>";
-
+    html += "<div class='fail'>❌ Review your answers and try again.</div>";
 }
-
-document.getElementById(
-"phaseResults"
-).innerHTML = html;
+document.getElementById("phaseResults").innerHTML = html;
 
 }
 
 function exportCSV(){
 
-let csv =
-"Transparency,Speed,Security,Cost Reduction,Platform Adoption\n";
+let csv = "Transparency,Speed,Security,Cost Reduction,Platform Adoption\n";
 
 dataset.forEach(row=>{
-
-csv += row.join(",") + "\n";
-
+    csv += row.join(",") + "\n";
 });
 
-let blob =
-new Blob(
-[csv],
-{type:"text/csv"}
-);
-
-let a =
-document.createElement("a");
-
-a.href =
-URL.createObjectURL(blob);
-
-a.download =
-"Dataset5_Blockchain_Securities.csv";
-
+let blob = new Blob([csv], {type:"text/csv"});
+let a = document.createElement("a");
+a.href = URL.createObjectURL(blob);
+a.download = "Dataset5_Blockchain_Securities.csv";
 a.click();
 
 }
 
+function withinTolerance(student, answer){
+    return Math.abs(student - answer) <= 0.05;
+}
+
+function gradeExcelSection(){
+    let score = 0;
+    let total = 14;
+
+    const answers = {
+        meanTransparency: 0.00,
+        meanSpeed: 0.00,
+        meanSecurity: 0.00,
+        meanCost: 0.00,
+        meanAdoption: 0.00,
+        corrTransparency: 0.00,
+        corrSpeed: 0.00,
+        corrSecurity: 0.00,
+        corrCost: 0.00,
+        multipleR: 0.00,
+        rSquare: 0.00,
+        adjustedRSquare: 0.00,
+        strongestPredictor: "Transparency" 
+    };
+
+    let html = "<h3>Excel Results</h3><ul>";
+
+    const checks = [
+        ["meanTransparency", answers.meanTransparency, "Transparency Mean"],
+        ["meanSpeed", answers.meanSpeed, "Processing Speed Mean"],
+        ["meanSecurity", answers.meanSecurity, "Security Mean"],
+        ["meanCost", answers.meanCost, "Cost Reduction Mean"],
+        ["meanAdoption", answers.meanAdoption, "Platform Adoption Mean"],
+        ["corrTransparency", answers.corrTransparency, "Transparency Correlation"],
+        ["corrSpeed", answers.corrSpeed, "Speed Correlation"],
+        ["corrSecurity", answers.corrSecurity, "Security Correlation"],
+        ["corrCost", answers.corrCost, "Cost Correlation"],
+        ["multipleR", answers.multipleR, "Multiple R"],
+        ["rSquare", answers.rSquare, "R Square"],
+        ["adjustedRSquare", answers.adjustedRSquare, "Adjusted R Square"]
+    ];
+
+    checks.forEach(item => {
+        let inputElement = document.getElementById(item[0]);
+        if(inputElement && inputElement.value !== "" && withinTolerance(Number(inputElement.value), item[1])){
+            score++;
+            html += "<li>✅ " + item[2] + "</li>";
+        }else{
+            html += "<li>❌ " + item[2] + "</li>";
+        }
+    });
+
+    if(document.getElementById("strongestPredictor").value === answers.strongestPredictor){
+        score++;
+        html += "<li>✅ Strongest Predictor</li>";
+    }else{
+        html += "<li>❌ Strongest Predictor</li>";
+    }
+
+    if(
+        document.getElementById("sigTransparency").checked &&
+        !document.getElementById("sigSpeed").checked &&
+        !document.getElementById("sigSecurity").checked &&
+        !document.getElementById("sigCost").checked
+    ){
+        score++;
+        html += "<li>✅ Significant Predictors</li>";
+    }else{
+        html += "<li>❌ Significant Predictors</li>";
+    }
+
+    html += "</ul>";
+    let percent = Math.round((score / total) * 100);
+    html += "<h3>Score: " + percent + "%</h3>";
+
+    if(percent >= 80){
+        html += "<div class='pass'>PASS</div>";
+    }else{
+        html += "<div class='fail'>REVIEW RESULTS</div>";
+    }
+    document.getElementById("excelResults").innerHTML = html;
+}
+
 function toggleAnswer(id){
 
-let answer =
-document.getElementById(id);
+let answer = document.getElementById(id);
 
 if(answer.style.display === "none"){
-
-answer.style.display = "block";
-
+    answer.style.display = "block";
 }else{
-
-answer.style.display = "none";
-
+    answer.style.display = "none";
 }
 
 }
