@@ -239,20 +239,50 @@ Download Dataset CSV
 <h2>Enter Excel Results</h2>
 
 <label>Investment Intention Mean</label><br>
-<input type="number" step="0.01"><br>
+<input type="number" step="0.01" id="meanInvestment"><br><br>
 
 <label>Trust Mean</label><br>
-<input type="number" step="0.01"><br>
+<input type="number" step="0.01" id="meanTrust"><br><br>
 
 <label>Knowledge Mean</label><br>
-<input type="number" step="0.01"><br>
+<input type="number" step="0.01" id="meanKnowledge"><br><br>
 
 <label>Risk Mean</label><br>
-<input type="number" step="0.01"><br>
+<input type="number" step="0.01" id="meanRisk"><br><br>
+
+<hr>
+
+<h3>Correlations With Investment Intention</h3>
+
+<label>Trust → Investment Intention</label><br>
+<input type="number" step="0.01" id="corrTrust"><br><br>
+
+<label>Knowledge → Investment Intention</label><br>
+<input type="number" step="0.01" id="corrKnowledge"><br><br>
+
+<label>Risk → Investment Intention</label><br>
+<input type="number" step="0.01" id="corrRisk"><br><br>
+
+<hr>
+
+<label>Strongest Predictor</label><br>
+
+<select id="strongestPredictor">
+    <option value="">Select</option>
+    <option value="Trust">Trust</option>
+    <option value="Knowledge">Knowledge</option>
+    <option value="Risk">Risk</option>
+</select>
+
+<br><br>
+
+<button onclick="gradeExcelSection()">
+    Grade Excel Results
+</button>
+
+<div id="excelResults"></div>
 
 </div>
-
-<div class="card">
 
 <h2>Interpretation Questions</h2>
 
@@ -403,22 +433,63 @@ function exportCSV(){
 
 }
 
-function toggleAnswer(id){
+function withinTolerance(student, answer){
+    return Math.abs(student - answer) <= 0.05;
+}
 
-    let answer =
-    document.getElementById(id);
+function gradeExcelSection(){
 
-    if(answer.style.display==="none"){
+    let score = 0;
+    let total = 8;
 
-        answer.style.display="block";
+    const answers = {
 
-    }else{
+        meanInvestment: 6.15,
+        meanTrust: 5.55,
+        meanKnowledge: 6.35,
+        meanRisk: 4.80,
 
-        answer.style.display="none";
+        corrTrust: 0.983,
+        corrKnowledge: 0.972,
+        corrRisk: -0.966,
 
+        strongestPredictor: "Trust"
+    };
+
+    let html =
+    "<h3>Excel Analysis Results</h3><ul>";
+
+    if(withinTolerance(
+        Number(document.getElementById("meanInvestment").value),
+        answers.meanInvestment
+    )){
+        score++;
+        html += "<li>✅ Investment Mean Correct</li>";
+    } else {
+        html += "<li>❌ Investment Mean Incorrect</li>";
     }
 
-}
+    if(withinTolerance(
+        Number(document.getElementById("meanTrust").value),
+        answers.meanTrust
+    )){
+        score++;
+        html += "<li>✅ Trust Mean Correct</li>";
+    } else {
+        html += "<li>❌ Trust Mean Incorrect</li>";
+    }
+
+    if(withinTolerance(
+        Number(document.getElementById("meanKnowledge").value),
+        answers.meanKnowledge
+    )){
+        score++;
+        html += "<li>✅ Knowledge Mean Correct</li>";
+    } else {
+        html += "<li>❌ Knowledge Mean Incorrect</li>";
+    }
+
+    if(withinTolerance(
 
 </script>
 
