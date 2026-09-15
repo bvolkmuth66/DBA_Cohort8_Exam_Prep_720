@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DBA 720 Lab - Futures, Margin and Hedging</title>
+<link rel="stylesheet" href="lab.css">
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">&larr; All modules</a>
+
+<div class="card">
+<span class="kicker">Derivatives &middot; Hull Ch. 1&ndash;6</span>
+<h1>Futures, Margin and Hedging</h1>
+<p class="sub">Marking to market, margin calls, and the minimum-variance hedge ratio &mdash; worked in Excel.</p>
+<div class="note">
+<strong>Why this module exists.</strong> Professor Vo's exam note said Excel was used in class for
+derivatives and pointed to the DerivaGem spreadsheet. Assignment 5 covered this material
+(Hull Ch.&nbsp;1&ndash;3) numerically. This module rehearses that work.
+</div>
+</div>
+
+<div class="card">
+<h2>Phase 1 &mdash; Concept gate</h2>
+<p>Answer all four correctly to unlock the data.</p>
+
+<h3>Question 1</h3>
+<p>A fabricator will <strong>purchase</strong> 180,000 units of refined copper in four months and wants to
+lock in the price. Which futures position hedges that exposure?</p>
+<select id="q1"><option value="">Select</option>
+<option value="long">Long futures</option>
+<option value="short">Short futures</option>
+<option value="none">No position &mdash; the exposure is already flat</option></select>
+
+<h3>Question 2</h3>
+<p>The firm hedges with an exchange-traded contract on standard-grade copper, but it actually buys a
+specialty alloy whose price moves closely with, but not identically to, the standard grade.
+What risk remains after the hedge is placed?</p>
+<select id="q2"><option value="">Select</option>
+<option value="basis">Basis risk</option>
+<option value="credit">Credit risk</option>
+<option value="none">No risk remains &mdash; the hedge is complete</option>
+<option value="liquidity">Liquidity risk only</option></select>
+
+<h3>Question 3</h3>
+<p>Which expression gives the minimum-variance hedge ratio <span class="mono">h</span>?</p>
+<select id="q3"><option value="">Select</option>
+<option value="a">h = &sigma;<sub>F</sub> / &sigma;<sub>S</sub></option>
+<option value="b">h = &rho; &times; &sigma;<sub>S</sub> / &sigma;<sub>F</sub></option>
+<option value="c">h = &rho; &times; &sigma;<sub>F</sub> / &sigma;<sub>S</sub></option>
+<option value="d">h = &rho;<sup>2</sup></option></select>
+
+<h3>Question 4</h3>
+<p>&ldquo;Marking to market&rdquo; means that&hellip;</p>
+<select id="q4"><option value="">Select</option>
+<option value="a">gains and losses are settled daily through the margin account</option>
+<option value="b">all gains and losses settle at contract maturity</option>
+<option value="c">the contract is revalued only when a margin call occurs</option></select>
+
+<br><br>
+<button onclick="gate()">Submit Phase 1</button>
+<div id="gateOut"></div>
+</div>
+
+<div id="unlocked" class="hidden">
+
+<div class="card">
+<h2>Problem A &mdash; Margin account</h2>
+<p>You go <strong>long 2 gold futures contracts</strong>. Each contract covers
+100 ounces. The futures price when you enter is
+<strong>$1,750 per ounce</strong>. The initial margin is
+<strong>$6,000 per contract</strong> and the maintenance margin is
+<strong>$4,500 per contract</strong>.</p>
+
+<h3>Settlement prices</h3>
+<div class="scroll"><table><thead><tr><th>Day</th><th>Settlement price ($/oz)</th></tr></thead>
+<tbody><tr><td>0</td><td>1750.0</td></tr><tr><td>1</td><td>1746</td></tr><tr><td>2</td><td>1739</td></tr><tr><td>3</td><td>1744</td></tr><tr><td>4</td><td>1731</td></tr><tr><td>5</td><td>1736</td></tr></tbody></table></div>
+
+<h4>In Excel</h4>
+<ol class="steps">
+<li>Build a table with one row per day: settlement price, daily price change, daily gain/loss
+(<span class="mono">change &times; 100 &times; 2</span>), and running balance starting at total initial margin.</li>
+<li>Add a column flagging whether the running balance has fallen below the <em>total</em> maintenance margin.</li>
+<li>Compute the settlement price at which a margin call is first triggered, algebraically rather than by trial and error.</li>
+</ol>
+<div class="warnbox">Report the day-5 balance <strong>assuming no variation margin was deposited</strong>,
+so the running total stays comparable.</div>
+
+<h3>Enter your results</h3>
+<div class="grid2">
+<div><label>Total initial margin ($)</label><input type="number" step="0.01" id="aIM"></div>
+<div><label>Total maintenance margin ($)</label><input type="number" step="0.01" id="aMM"></div>
+<div><label>Settlement price triggering a margin call ($/oz)</label><input type="number" step="0.01" id="aCallPrice"></div>
+<div><label>Day on which the call is first triggered</label><input type="number" step="1" id="aCallDay"></div>
+<div><label>Variation margin required that day ($)</label><input type="number" step="0.01" id="aVarMargin"></div>
+<div><label>Balance at end of day 5, no deposit ($)</label><input type="number" step="0.01" id="aFinal"></div>
+</div>
+<button onclick="gradeA()">Grade Problem A</button>
+<button class="ghost" onclick="Lab.reveal('aModel')">Show worked logic</button>
+<div id="aOut"></div>
+<div id="aModel" class="model hidden">
+<strong>Worked logic.</strong> Total initial margin = 2 &times; $6,000 = $12,000.
+Total maintenance = 2 &times; $4,500 = $9,000.
+The account can absorb $3,000 of loss before a call. Total position size is
+2 &times; 100 = 200 ounces, so the tolerable price fall is
+$3,000 / 200 = $15.00/oz, giving a call at
+$1,735.00. Marking to market day by day, the balance first breaches maintenance on
+day&nbsp;4 at $8,200.00; restoring the <em>initial</em> margin requires a deposit of
+$3,800.00. Because a long position loses when price falls, the sign convention matters more
+than the arithmetic here.
+</div>
+</div>
+
+<div class="card">
+<h2>Problem B &mdash; Minimum-variance hedge</h2>
+<p>The fabricator will buy <strong>180,000 units</strong> of copper in four months. Each futures contract
+covers <strong>15,000 units</strong>. Twelve months of paired monthly changes in the spot price
+(&Delta;S) and the futures price (&Delta;F), in $/unit, are below.</p>
+
+<div class="scroll"><table><thead><tr><th>Month</th><th>&Delta;S</th><th>&Delta;F</th></tr></thead>
+<tbody><tr><td>1</td><td>0.2</td><td>0.3</td></tr><tr><td>2</td><td>0.4</td><td>0.12</td></tr><tr><td>3</td><td>-0.14</td><td>-0.03</td></tr><tr><td>4</td><td>-1.15</td><td>-1.28</td></tr><tr><td>5</td><td>0.06</td><td>0.24</td></tr><tr><td>6</td><td>-1.11</td><td>-1.17</td></tr><tr><td>7</td><td>0.37</td><td>0.5</td></tr><tr><td>8</td><td>0.34</td><td>0.33</td></tr><tr><td>9</td><td>0.34</td><td>0.46</td></tr><tr><td>10</td><td>0.32</td><td>0.46</td></tr><tr><td>11</td><td>0.01</td><td>0.16</td></tr><tr><td>12</td><td>-0.23</td><td>-0.29</td></tr></tbody></table></div>
+<button class="ghost" onclick="exportB()">Export CSV</button>
+
+<h4>In Excel</h4>
+<ol class="steps">
+<li>Compute <span class="mono">COVARIANCE.S(&Delta;S,&Delta;F)</span> and <span class="mono">VAR.S(&Delta;F)</span>.</li>
+<li>Form <span class="mono">h = COVARIANCE.S / VAR.S</span>. Confirm it equals
+<span class="mono">SLOPE(&Delta;S,&Delta;F)</span> and equals <span class="mono">CORREL &times; STDEV.S(&Delta;S) / STDEV.S(&Delta;F)</span>
+&mdash; three routes, one number.</li>
+<li>Optimal contracts <span class="mono">N = h &times; Q<sub>S</sub> / Q<sub>F</sub></span>, then round to a whole contract.</li>
+</ol>
+
+<h3>Enter your results</h3>
+<div class="grid2">
+<div><label>Covariance(&Delta;S, &Delta;F)</label><input type="number" step="0.0001" id="bCov"></div>
+<div><label>Variance(&Delta;F)</label><input type="number" step="0.0001" id="bVar"></div>
+<div><label>Correlation(&Delta;S, &Delta;F)</label><input type="number" step="0.0001" id="bRho"></div>
+<div><label>Minimum-variance hedge ratio h</label><input type="number" step="0.0001" id="bH"></div>
+<div><label>Optimal number of contracts (exact)</label><input type="number" step="0.0001" id="bNexact"></div>
+<div><label>Contracts actually traded (rounded)</label><input type="number" step="1" id="bNround"></div>
+</div>
+<label>Position direction</label>
+<select id="bDir"><option value="">Select</option>
+<option value="long">Long</option><option value="short">Short</option></select>
+<br>
+<button onclick="gradeB()">Grade Problem B</button>
+<button class="ghost" onclick="Lab.reveal('bModel')">Show worked logic</button>
+<div id="bOut"></div>
+<div id="bModel" class="model hidden">
+<strong>Worked logic.</strong> h = 0.323324 / 0.36897 = <strong>0.8763</strong>.
+N = 0.8763 &times; 180,000 / 15,000 = 10.5155, so <strong>11 contracts</strong>.
+Note what the hedge ratio is doing: a naive one-for-one hedge would trade
+12 contracts, and the minimum-variance calculation says 11.
+The gap is the correction for imperfect co-movement &mdash; futures are more volatile than spot here, so
+fewer contracts are needed. And <span class="mono">h</span> is a regression slope:
+the same Cov/Var estimator that produces beta in the market model.
+</div>
+</div>
+
+<div class="card">
+<h2>Interpretation</h2>
+<p>Write a short answer to each, then compare with the model response.</p>
+
+<h3>1. Two traders, same profit, different experience</h3>
+<p>Trader A holds a futures contract and Trader B an otherwise identical forward contract. Both end
+with the same total profit. Explain why A may nevertheless be worse off.</p>
+<textarea id="i1"></textarea>
+<button class="ghost" onclick="Lab.reveal('i1m')">Model response</button>
+<div id="i1m" class="model hidden">The profits are equal only at maturity. The futures position is
+marked to market daily, so its cash flows arrive as a stream of margin debits and credits rather than a
+single settlement. If the price path moves against Trader A early, margin calls demand cash at exactly
+the moment the position looks worst. That creates a funding and liquidity cost the forward does not
+impose: capital is tied up, other opportunities are foregone, and in the extreme a solvent position can
+be closed out because the trader cannot meet a call. Identical terminal payoffs, different risk. This is
+the mechanism behind the LTCM failure Jorion (2000) documents &mdash; the positions were arguably right,
+and the financing was not.</div>
+
+<h3>2. What survives the hedge</h3>
+<p>After placing the minimum-variance hedge, what exposure does the fabricator still carry, and why can
+it not be eliminated with more contracts?</p>
+<textarea id="i2"></textarea>
+<button class="ghost" onclick="Lab.reveal('i2m')">Model response</button>
+<div id="i2m" class="model hidden">Basis risk &mdash; the residual variation between the spot price of the
+alloy actually purchased and the futures price of the standard grade. Adding contracts changes the
+<em>size</em> of the futures exposure, not the <em>correlation</em> between the two prices, and it is the
+imperfect correlation that generates the residual. The hedge ratio minimises the variance of the hedged
+position; it does not drive it to zero unless &rho;&nbsp;=&nbsp;1. There is also quantity risk if the
+eventual purchase differs from 180,000 units, and rounding to a whole number of contracts leaves a small
+unavoidable mismatch of its own.</div>
+</div>
+
+</div>
+
+</div>
+<script src="lab.js"></script>
+<script>
+
+const D={"pairs": [[0.2, 0.3], [0.4, 0.12], [-0.14, -0.03], [-1.15, -1.28], [0.06, 0.24], [-1.11, -1.17], [0.37, 0.5], [0.34, 0.33], [0.34, 0.46], [0.32, 0.46], [0.01, 0.16], [-0.23, -0.29]]};
+function gate(){
+  const res=Lab.gradeItems([
+    {id:"q1",label:"Q1 hedge direction",type:"select",is:"long"},
+    {id:"q2",label:"Q2 residual risk",type:"select",is:"basis"},
+    {id:"q3",label:"Q3 hedge ratio formula",type:"select",is:"b"},
+    {id:"q4",label:"Q4 marking to market",type:"select",is:"a"}
+  ]);
+  Lab.report("gateOut",res,100,function(){Lab.show("unlocked");});
+}
+function gradeA(){
+  Lab.report("aOut",Lab.gradeItems([
+    {id:"aIM",label:"Total initial margin",expected:12000.0,tol:0.5},
+    {id:"aMM",label:"Total maintenance margin",expected:9000.0,tol:0.5},
+    {id:"aCallPrice",label:"Margin-call price",expected:1735.0,tol:0.05},
+    {id:"aCallDay",label:"Day of first call",expected:4,tol:0.01},
+    {id:"aVarMargin",label:"Variation margin",expected:3800.0,tol:0.5},
+    {id:"aFinal",label:"Day-5 balance",expected:9200.0,tol:0.5}
+  ]),80);
+}
+function gradeB(){
+  Lab.report("bOut",Lab.gradeItems([
+    {id:"bCov",label:"Covariance",expected:0.323324,tol:0.002},
+    {id:"bVar",label:"Variance of dF",expected:0.36897,tol:0.002},
+    {id:"bRho",label:"Correlation",expected:0.9759,tol:0.005},
+    {id:"bH",label:"Hedge ratio h",expected:0.8763,tol:0.005},
+    {id:"bNexact",label:"Exact contracts",expected:10.5155,tol:0.05},
+    {id:"bNround",label:"Rounded contracts",expected:11,tol:0.01},
+    {id:"bDir",label:"Direction",type:"select",is:"long"}
+  ]),80);
+}
+function exportB(){Lab.exportCSV("deriv1_hedge_data.csv",["Month","dS","dF"],
+  D.pairs.map((p,i)=>[i+1,p[0],p[1]]));}
+
+</script>
+</body>
+</html>
