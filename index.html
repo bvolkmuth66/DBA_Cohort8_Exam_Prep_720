@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DBA 720 Comprehensive Exam Prep Lab</title>
+<link rel="stylesheet" href="lab.css">
+<style>
+ul.modlist{list-style:none;padding:0;margin:0}
+ul.modlist li{margin-bottom:12px}
+ul.modlist a{display:block;padding:14px 16px;background:var(--navy);color:#fff;
+  text-decoration:none;border-radius:7px;transition:background .15s}
+ul.modlist a:hover{background:var(--navy-l)}
+.mname{display:block;font-weight:bold;font-size:1.02rem}
+.mdesc{display:block;font-size:.88rem;opacity:.9;margin-top:3px;font-weight:normal}
+.mfile{display:block;font-size:.76rem;opacity:.65;margin-top:5px;font-family:Consolas,Monaco,monospace}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="card">
+<span class="kicker">Version 3.0</span>
+<h1>DBA 720 Comprehensive Exam Prep Lab</h1>
+<p class="sub">Excel practice for the computational half of the examination.</p>
+
+<div class="note">
+<strong>What the instructor said.</strong> Most questions will be essay-based, with the syllabus reading list
+as the primary preparation resource. He will not ask in Excel for tasks completed in Python. Excel
+<em>was</em> used in class for derivatives &mdash; review that material and the DerivaGem spreadsheet. Review
+regression in Excel along with mean, variance, covariance and correlation.
+<br><br>
+This lab covers the second half of that instruction. The essays are prepared from the readings, not here.
+</div>
+
+<div class="warnbox">
+<strong>Start with derivatives.</strong> It is the only topic named specifically in the exam note, it cannot be
+absorbed by reading, and it was absent from version 2.0 entirely.
+</div>
+</div>
+
+<div class="card"><h2>Derivatives</h2><p class="sub">Named explicitly in Professor Vo's exam-preparation note. Highest priority, and the largest gap in v2.0.</p><ul class="modlist"><li><a href="DBA720_Deriv1_Futures.html"><span class="mname">Futures, Margin and Hedging</span><span class="mdesc">Marking to market, margin calls, minimum-variance hedge ratio. Hull Ch. 1&ndash;6.</span><span class="mfile">DBA720_Deriv1_Futures.html</span></a></li><li><a href="DBA720_Deriv2_Options.html"><span class="mname">Option Pricing and the Greeks</span><span class="mdesc">Black&ndash;Scholes, two-step binomial tree, put&ndash;call parity. Hull Ch. 8&ndash;13 and DerivaGem.</span><span class="mfile">DBA720_Deriv2_Options.html</span></a></li></ul></div><div class="card"><h2>Quantitative methods</h2><p class="sub">The apparatus built in Assignment 1 and taught across six of the seven class meetings.</p><ul class="modlist"><li><a href="DBA720_Quant1_MarketModel.html"><span class="mname">The Market Model</span><span class="mdesc">Alpha, beta, covariance, correlation, skewness and kurtosis. The Assignment 1 regression, in Excel.</span><span class="mfile">DBA720_Quant1_MarketModel.html</span></a></li><li><a href="DBA720_Quant2_Portfolio.html"><span class="mname">Portfolio Theory</span><span class="mdesc">Covariance matrix, diversification, minimum-variance weights, Sharpe ratio. Weeks 3 and 5.</span><span class="mfile">DBA720_Quant2_Portfolio.html</span></a></li><li><a href="DBA720_Quant3_EventStudy.html"><span class="mname">Event Study</span><span class="mdesc">Estimation window, abnormal returns, CAR and its test statistic. Week 7, MacKinlay (1997).</span><span class="mfile">DBA720_Quant3_EventStudy.html</span></a></li><li><a href="DBA720_Quant4_MonteCarlo.html"><span class="mname">Monte Carlo Simulation</span><span class="mdesc">Simulating terminal prices, valuing by simulation, standard error and convergence. Week 11.</span><span class="mfile">DBA720_Quant4_MonteCarlo.html</span></a></li></ul></div><div class="card"><h2>Survey research and multiple regression</h2><p class="sub">Cross-sectional perception data. Maps to Albayati, Kim and Rho (2021).</p><ul class="modlist"><li><a href="DBA720_Dataset1.html"><span class="mname">Dataset 1 &mdash; Blockchain Adoption</span><span class="mdesc">Revised in v3.0: separated predictors and a new collinearity diagnostic phase.</span><span class="mfile">DBA720_Dataset1.html</span></a></li><li><a href="DBA720_Dataset2.html"><span class="mname">Dataset 2 &mdash; FinTech Customer Satisfaction</span><span class="mdesc">Original v2.0 module.</span><span class="mfile">DBA720_Dataset2.html</span></a></li><li><a href="DBA720_Dataset3.html"><span class="mname">Dataset 3 &mdash; Cryptocurrency Investment Intentions</span><span class="mdesc">Original v2.0 module.</span><span class="mfile">DBA720_Dataset3.html</span></a></li><li><a href="DBA720_Dataset4.html"><span class="mname">Dataset 4 &mdash; Cryptocurrency Wallet User Experience</span><span class="mdesc">Original v2.0 module.</span><span class="mfile">DBA720_Dataset4.html</span></a></li><li><a href="DBA720_Dataset5.html"><span class="mname">Dataset 5 &mdash; Blockchain Securities Trading</span><span class="mdesc">Original v2.0 module.</span><span class="mfile">DBA720_Dataset5.html</span></a></li></ul></div>
+
+<div class="card">
+<h2>One estimator, three names</h2>
+<p>Worth noticing as you work through these. The same quantity &mdash;
+<span class="mono">Cov(x,y) / Var(y)</span> &mdash; appears as <strong>beta</strong> in the market model,
+as the <strong>minimum-variance hedge ratio</strong> in the derivatives module, and as the
+<strong>market-model slope</strong> that generates expected returns in the event study. Three applications,
+one regression coefficient. Naming that connection in an essay costs a sentence and shows the quantitative
+material is understood as one structure rather than four separate procedures.</p>
+</div>
+
+</div>
+</body>
+</html>

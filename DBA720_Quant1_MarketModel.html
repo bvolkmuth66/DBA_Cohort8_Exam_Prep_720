@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DBA 720 Lab - The Market Model</title>
+<link rel="stylesheet" href="lab.css">
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">&larr; All modules</a>
+
+<div class="card">
+<span class="kicker">Quantitative &middot; Assignment 1 apparatus</span>
+<h1>The Market Model: Alpha, Beta and Return Distributions</h1>
+<p class="sub">Regressing an asset's returns on the market &mdash; and checking whether the distribution
+justifies the tools built on top of it.</p>
+<div class="note">
+<strong>Why this module exists.</strong> Assignment&nbsp;1 required exactly this work in Python: returns,
+skewness, kurtosis, covariance, correlation, and a regression of each stock on SPY reporting alpha and
+beta. Professor Vo's exam note says he will not ask in Excel for the tasks completed in Python &mdash; but he
+<em>does</em> ask for regression and the basic statistics in Excel, on a small series. That is this module.
+</div>
+</div>
+
+<div class="card">
+<h2>Phase 1 &mdash; Concept gate</h2>
+<p>A fintech-sector stock is regressed on a broad market index using 36 monthly returns.</p>
+
+<h3>Question 1</h3>
+<p>In the market-model regression, which variable is the dependent variable?</p>
+<select id="q1"><option value="">Select</option>
+<option value="stock">The stock's return</option>
+<option value="market">The market index return</option>
+<option value="rf">The risk-free rate</option></select>
+
+<h3>Question 2</h3>
+<p>The estimated <em>slope</em> measures&hellip;</p>
+<select id="q2"><option value="">Select</option>
+<option value="beta">beta &mdash; sensitivity to market-wide movements, i.e. systematic risk</option>
+<option value="alpha">alpha &mdash; return unexplained by the market</option>
+<option value="tot">the stock's total risk</option>
+<option value="idio">the stock's idiosyncratic risk</option></select>
+
+<h3>Question 3</h3>
+<p>The estimated <em>intercept</em> measures&hellip;</p>
+<select id="q3"><option value="">Select</option>
+<option value="alpha">average return not explained by market exposure</option>
+<option value="beta">the stock's sensitivity to the market</option>
+<option value="err">the standard error of the regression</option></select>
+
+<h3>Question 4</h3>
+<p>R<sup>2</sup> from this regression is best interpreted as&hellip;</p>
+<select id="q4"><option value="">Select</option>
+<option value="sys">the share of the stock's return variance attributable to systematic (market) risk</option>
+<option value="acc">the accuracy of next month's forecast</option>
+<option value="sig">the statistical significance of beta</option></select>
+
+<h3>Question 5</h3>
+<p>Which Excel expression reproduces the regression slope exactly?</p>
+<select id="q5"><option value="">Select</option>
+<option value="cv">COVARIANCE.S(stock,market) / VAR.S(market)</option>
+<option value="vc">VAR.S(market) / COVARIANCE.S(stock,market)</option>
+<option value="cc">CORREL(stock,market) / VAR.S(market)</option>
+<option value="ss">STDEV.S(stock) / STDEV.S(market)</option></select>
+
+<br><br>
+<button onclick="gate()">Submit Phase 1</button>
+<div id="gateOut"></div>
+</div>
+
+<div id="unlocked" class="hidden">
+<div class="card">
+<h2>Data &mdash; 36 monthly returns (%)</h2>
+<div id="tbl"></div>
+<button class="ghost" onclick="expCSV()">Export CSV</button>
+<p>The risk-free rate is 0.3% per month.</p>
+</div>
+
+<div class="card">
+<h2>Excel work</h2>
+<ol class="steps">
+<li>For <em>each</em> series compute <span class="mono">AVERAGE</span>, <span class="mono">VAR.S</span>,
+<span class="mono">STDEV.S</span>, <span class="mono">SKEW</span> and <span class="mono">KURT</span>.
+Excel's <span class="mono">KURT</span> already returns <strong>excess</strong> kurtosis, so a normal
+distribution scores 0, not 3.</li>
+<li>Compute <span class="mono">COVARIANCE.S</span> and <span class="mono">CORREL</span> between the two series.</li>
+<li>Run the regression three ways and confirm they agree:
+<span class="mono">SLOPE</span>/<span class="mono">INTERCEPT</span>/<span class="mono">RSQ</span>;
+the Data Analysis ToolPak regression; and
+<span class="mono">COVARIANCE.S/VAR.S</span> for the slope.</li>
+</ol>
+<div class="warnbox"><strong>Excel trap.</strong> The Data Analysis ToolPak's <em>Covariance</em> tool returns
+<strong>population</strong> covariance (dividing by n), while <span class="mono">COVARIANCE.S</span> and
+<span class="mono">VAR.S</span> divide by n&minus;1. Mixing them changes the number. The ratio
+Cov/Var is unaffected only if you are consistent &mdash; use the <span class="mono">.S</span> functions throughout.</div>
+
+<h3>Enter your results</h3>
+<h4>Stock</h4>
+<div class="grid2">
+<div><label>Mean (%)</label><input type="number" step="0.0001" id="ms"></div>
+<div><label>Variance</label><input type="number" step="0.0001" id="vs"></div>
+<div><label>Std deviation</label><input type="number" step="0.0001" id="ss"></div>
+<div><label>Skewness</label><input type="number" step="0.0001" id="sks"></div>
+<div><label>Excess kurtosis</label><input type="number" step="0.0001" id="kus"></div>
+</div>
+<h4>Market</h4>
+<div class="grid2">
+<div><label>Mean (%)</label><input type="number" step="0.0001" id="mm"></div>
+<div><label>Variance</label><input type="number" step="0.0001" id="vm"></div>
+<div><label>Std deviation</label><input type="number" step="0.0001" id="sm"></div>
+<div><label>Skewness</label><input type="number" step="0.0001" id="skm"></div>
+<div><label>Excess kurtosis</label><input type="number" step="0.0001" id="kum"></div>
+</div>
+<h4>Joint and regression</h4>
+<div class="grid2">
+<div><label>Covariance(stock, market)</label><input type="number" step="0.0001" id="cov"></div>
+<div><label>Correlation</label><input type="number" step="0.0001" id="cor"></div>
+<div><label>Alpha (intercept)</label><input type="number" step="0.0001" id="al"></div>
+<div><label>Beta (slope)</label><input type="number" step="0.0001" id="be"></div>
+<div><label>Beta recomputed as Cov/Var</label><input type="number" step="0.0001" id="bechk"></div>
+<div><label>R<sup>2</sup></label><input type="number" step="0.0001" id="r2"></div>
+</div>
+<button onclick="gradeAll()">Grade</button>
+<button class="ghost" onclick="Lab.reveal('mdl')">Show values</button>
+<div id="out"></div>
+<div id="mdl" class="model hidden">
+Stock: mean 1.9108, variance 39.4501, SD 6.2809, skewness 0.6746,
+excess kurtosis <strong>2.2848</strong>.<br>
+Market: mean 1.0022, variance 11.3138, SD 3.3636, skewness -0.678,
+excess kurtosis 0.6296.<br>
+Covariance 16.064, correlation 0.7604, alpha 0.4878, beta 1.4199,
+Cov/Var 1.4199 (identical &mdash; they are the same estimator), R<sup>2</sup> 0.5782.
+</div>
+</div>
+
+<div class="card">
+<h2>Interpretation</h2>
+
+<h3>1. What the kurtosis figure does to everything else</h3>
+<p>The stock's excess kurtosis is 2.2848. Explain what that means and what it implies for the risk
+measures built on this data.</p>
+<textarea id="i1"></textarea>
+<button class="ghost" onclick="Lab.reveal('i1m')">Model response</button>
+<div id="i1m" class="model hidden">Excess kurtosis of 2.2848 means the distribution has fatter tails
+than the normal &mdash; extreme monthly returns occur materially more often than a normal distribution with
+the same standard deviation would predict. The consequences run through everything downstream. Standard
+deviation and variance still <em>exist</em>, but they understate the probability of large adverse moves, so
+any risk measure calibrated on them &mdash; Value at Risk most obviously &mdash; is too optimistic in the
+tail. Confidence intervals and t-statistics that assume normality are mis-sized. Sharpe ratios compare
+assets on mean and standard deviation alone, so they are blind to exactly the tail risk that distinguishes
+this asset. And option-pricing models resting on lognormal returns will misprice out-of-the-money options.
+This is why Assignment 1 asked for the QQ plot and the density plot before any theory was taught: the
+distributional problem is established first, and then the course spends the term applying tools that assume
+it away. Cryptocurrency returns are considerably worse on this dimension than the equities here.</div>
+
+<h3>2. Alpha, honestly</h3>
+<p>The estimated alpha is 0.4878% per month. What would it take before you would describe that as
+evidence of manager skill?</p>
+<textarea id="i2"></textarea>
+<button class="ghost" onclick="Lab.reveal('i2m')">Model response</button>
+<div id="i2m" class="model hidden">Very little, on this evidence. First, statistical significance: with
+36 observations and residual variance this size, the standard error on the intercept is large, and the point
+estimate is almost certainly indistinguishable from zero. Second, model specification: alpha is a residual,
+so it captures whatever the single market factor omits. Add size, value, or momentum factors and apparent
+alpha routinely shrinks. Third, net of costs: gross alpha before fees, trading costs and taxes is not a
+return anyone receives. Fourth, survivorship: if this asset entered the sample because it survived and
+performed, the estimate is biased upward before it is computed. Bianchi and Babiak (2022) confront all four
+of these in the crypto-fund setting, and their finding of positive abnormal returns net of expenses is
+interesting precisely because those corrections are hard to make there &mdash; the sample is short, the
+factor model for digital assets is unsettled, and fund attrition is high.</div>
+
+<h3>3. The connection worth naming</h3>
+<p>Where else in this course have you computed Cov/Var, under a different name?</p>
+<textarea id="i3"></textarea>
+<button class="ghost" onclick="Lab.reveal('i3m')">Model response</button>
+<div id="i3m" class="model hidden">Three places, and they are the same estimator. Beta here. The
+minimum-variance hedge ratio in the derivatives module, h = Cov(&Delta;S,&Delta;F)/Var(&Delta;F). And the
+market-model slope used to generate expected returns in an event study, which is where beta goes to work as
+a research tool rather than a risk measure. Each is a regression coefficient: the covariance of two series
+scaled by the variance of the explanatory one. Naming that connection in an essay costs a sentence and
+demonstrates that the quantitative material is understood as one structure rather than four procedures.</div>
+</div>
+</div>
+
+</div>
+<script src="lab.js"></script>
+<script>
+
+const RM=[2.4, -1.55, 2.63, 4.33, 2.02, 0.75, 2.01, 6.17, -4.85, 7.29, -1.11, -0.19, -1.1, -1.96, -0.08, 2.6, 2.35, 2.3, 0.2, 4.09, -3.29, 2.51, 1.86, 3.81, 5.31, -7.78, 0.32, -0.08, -2.58, -6.75, 4.38, 4.96, 3.17, 1.45, -0.76, 1.25],RS=[1.22, 0.78, 5.23, 9.42, 2.49, 1.56, -1.29, 9.13, -4.8, 9.65, 4.02, -0.83, -1.73, -5.3, 0.5, 3.66, 0.71, 6.76, 3.68, 14.59, -3.83, 21.64, -0.51, 1.94, 4.69, -12.21, -1.31, -2.31, -4.49, -9.79, 2.25, 7.04, 1.34, 2.0, -0.02, 2.91];
+function gate(){
+  Lab.report("gateOut",Lab.gradeItems([
+    {id:"q1",label:"Q1 dependent variable",type:"select",is:"stock"},
+    {id:"q2",label:"Q2 slope",type:"select",is:"beta"},
+    {id:"q3",label:"Q3 intercept",type:"select",is:"alpha"},
+    {id:"q4",label:"Q4 R-squared",type:"select",is:"sys"},
+    {id:"q5",label:"Q5 slope in Excel",type:"select",is:"cv"}
+  ]),80,function(){Lab.show("unlocked");draw();});
+}
+function draw(){
+  Lab.renderTable("tbl",["Month","Stock return (%)","Market return (%)"],
+    RS.map((v,i)=>[i+1,v.toFixed(2),RM[i].toFixed(2)]));
+}
+function expCSV(){Lab.exportCSV("market_model_returns.csv",["Month","Stock","Market"],
+  RS.map((v,i)=>[i+1,v,RM[i]]));}
+function gradeAll(){
+  Lab.report("out",Lab.gradeItems([
+    {id:"ms",label:"Stock mean",expected:1.9108,tol:0.01},
+    {id:"vs",label:"Stock variance",expected:39.4501,tol:0.05},
+    {id:"ss",label:"Stock SD",expected:6.2809,tol:0.01},
+    {id:"sks",label:"Stock skewness",expected:0.6746,tol:0.01},
+    {id:"kus",label:"Stock excess kurtosis",expected:2.2848,tol:0.02},
+    {id:"mm",label:"Market mean",expected:1.0022,tol:0.01},
+    {id:"vm",label:"Market variance",expected:11.3138,tol:0.05},
+    {id:"sm",label:"Market SD",expected:3.3636,tol:0.01},
+    {id:"skm",label:"Market skewness",expected:-0.678,tol:0.01},
+    {id:"kum",label:"Market excess kurtosis",expected:0.6296,tol:0.02},
+    {id:"cov",label:"Covariance",expected:16.064,tol:0.05},
+    {id:"cor",label:"Correlation",expected:0.7604,tol:0.005},
+    {id:"al",label:"Alpha",expected:0.4878,tol:0.01},
+    {id:"be",label:"Beta",expected:1.4199,tol:0.005},
+    {id:"bechk",label:"Beta via Cov/Var",expected:1.4199,tol:0.005},
+    {id:"r2",label:"R-squared",expected:0.5782,tol:0.005}
+  ]),80);
+}
+
+</script>
+</body>
+</html>

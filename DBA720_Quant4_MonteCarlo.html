@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DBA 720 Lab - Monte Carlo Simulation</title>
+<link rel="stylesheet" href="lab.css">
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">&larr; All modules</a>
+
+<div class="card">
+<span class="kicker">Quantitative &middot; Week 11</span>
+<h1>Monte Carlo Simulation</h1>
+<p class="sub">Valuing an option by simulating the underlying &mdash; and checking the answer against a
+closed form.</p>
+<div class="note">
+<strong>Why this module exists.</strong> Week&nbsp;11 was a full meeting on Monte Carlo simulation, but no
+reading was assigned and Professor Vo's exam note does not mention it. Treat this as lower priority than the
+derivatives modules: know how to <em>describe</em> and <em>set up</em> a simulation rather than expecting to
+run a large one under exam conditions.
+</div>
+</div>
+
+<div class="card">
+<h2>Phase 1 &mdash; Concept gate</h2>
+
+<h3>Question 1</h3>
+<p>Under the risk-neutral measure, the terminal stock price in a geometric Brownian motion model is&hellip;</p>
+<select id="q1"><option value="">Select</option>
+<option value="a">S<sub>T</sub> = S<sub>0</sub> &times; EXP( (r &minus; &sigma;&sup2;/2)T + &sigma;&radic;T &times; z )</option>
+<option value="b">S<sub>T</sub> = S<sub>0</sub> &times; EXP( rT + &sigma;&sup2;T &times; z )</option>
+<option value="c">S<sub>T</sub> = S<sub>0</sub> &times; (1 + rT + &sigma;z)</option></select>
+
+<h3>Question 2</h3>
+<p>Why does the drift use <span class="mono">r &minus; &sigma;&sup2;/2</span> rather than <span class="mono">r</span>?</p>
+<select id="q2"><option value="">Select</option>
+<option value="a">It is the Ito correction, so that the <em>expected</em> stock price grows at r</option>
+<option value="b">It adjusts for the investor's risk aversion</option>
+<option value="c">It converts an annual rate into a continuous one</option></select>
+
+<h3>Question 3</h3>
+<p>Quadrupling the number of simulated paths reduces the standard error of the estimate by a factor of&hellip;</p>
+<select id="q3"><option value="">Select</option>
+<option value="2">2</option><option value="4">4</option><option value="16">16</option></select>
+
+<h3>Question 4</h3>
+<p>In Excel, which expression draws a standard normal random variable?</p>
+<select id="q4"><option value="">Select</option>
+<option value="a">NORM.S.INV(RAND())</option>
+<option value="b">RAND()</option>
+<option value="c">NORM.S.DIST(RAND(),TRUE)</option>
+<option value="d">RANDBETWEEN(-3,3)</option></select>
+
+<br><br>
+<button onclick="gate()">Submit Phase 1</button>
+<div id="gateOut"></div>
+</div>
+
+<div id="unlocked" class="hidden">
+<div class="card">
+<h2>The problem</h2>
+<p>Value a European call by simulation: S<sub>0</sub> = $50.00, K = $50.00,
+r = 5%, &sigma; = 35%, T = 1 year, no dividends.
+Use <strong>1,000 paths</strong>.</p>
+
+<h4>In Excel</h4>
+<pre class="mono">A1: drift      = (r - 0.5*sigma^2)*T
+A2: diffusion  = sigma*SQRT(T)
+
+Column A (1,000 rows):  z   = NORM.S.INV(RAND())
+Column B:  S_T = S0*EXP($A$1 + $A$2*A2)
+Column C:  payoff = MAX(B2 - K, 0)
+
+price = EXP(-r*T) * AVERAGE(C:C)
+SE    = EXP(-r*T) * STDEV.S(C:C) / SQRT(1000)</pre>
+<div class="warnbox"><strong>RAND() is volatile.</strong> Every recalculation redraws every path, so your
+price changes each time you press F9. Paste-special the payoffs as values before reporting, or accept that
+the figure moves &mdash; that variability <em>is</em> the simulation error you are asked to quantify.</div>
+
+<h3>Enter your results</h3>
+<div class="grid2">
+<div><label>Drift term (r &minus; &sigma;&sup2;/2)T</label><input type="number" step="0.000001" id="drift"></div>
+<div><label>Diffusion coefficient &sigma;&radic;T</label><input type="number" step="0.000001" id="diff"></div>
+<div><label>Black&ndash;Scholes call value ($)</label><input type="number" step="0.0001" id="bs"></div>
+<div><label>Your simulated call value ($)</label><input type="number" step="0.0001" id="mc"></div>
+<div><label>Standard error of your estimate ($)</label><input type="number" step="0.0001" id="se"></div>
+</div>
+<button onclick="gradeAll()">Grade</button>
+<button class="ghost" onclick="Lab.reveal('mdl')">Show values</button>
+<div id="out"></div>
+<div id="mdl" class="model hidden">
+Drift = -0.01125, diffusion = 0.35.
+Black&ndash;Scholes gives <strong>$8.0642</strong> exactly.
+A large reference simulation returns $8.1013, and the standard error at
+1,000 paths is approximately $0.4252.<br><br>
+Your simulated value is graded against a tolerance of roughly three standard errors, because it
+<em>should</em> differ from the closed form &mdash; that is what a finite sample means. If your figure sits
+within about &plusmn;$1.28 of $8.0642, the simulation is working. Raising the path count to
+10,000 would cut the standard error to about $0.1344 &mdash; the &radic;n rule, and the reason Monte
+Carlo is expensive when high precision is needed.
+</div>
+</div>
+
+<div class="card">
+<h2>Interpretation</h2>
+
+<h3>1. When simulation earns its cost</h3>
+<p>Black&ndash;Scholes answered this question instantly and exactly. Why would anyone simulate?</p>
+<textarea id="i1"></textarea>
+<button class="ghost" onclick="Lab.reveal('i1m')">Model response</button>
+<div id="i1m" class="model hidden">Because the closed form exists only for a narrow class of problems.
+Monte Carlo is indifferent to the shape of the payoff, so it prices path-dependent instruments &mdash; Asian,
+barrier, lookback options &mdash; where no analytic solution exists. It handles multiple correlated
+underlyings, stochastic volatility, jump processes, and fat-tailed distributions without reformulation. It
+extends naturally to portfolio risk: simulate the joint distribution of returns and read VaR or expected
+shortfall off the simulated tail, which is precisely where a normal approximation fails for the
+non-normal series in this course. The cost is precision per unit of computation &mdash; the &radic;n rule
+means halving the error takes four times the work &mdash; and the fact that results inherit every assumption
+in the data-generating process. Validating against a known closed form first, exactly as this module does,
+is how you establish the machinery is right before pointing it at a problem where you cannot check the
+answer.</div>
+
+<h3>2. The assumption that matters most</h3>
+<p>This simulation drew from a normal distribution. Given what the market-model module showed about return
+distributions, what follows?</p>
+<textarea id="i2"></textarea>
+<button class="ghost" onclick="Lab.reveal('i2m')">Model response</button>
+<div id="i2m" class="model hidden">That the simulation reproduces Black&ndash;Scholes because it assumes the
+same world, not because it independently confirms it. Drawing z from a standard normal makes terminal prices
+lognormal by construction, which is the Black&ndash;Scholes assumption. If the real return distribution is
+fat-tailed &mdash; and the market-model module found substantial excess kurtosis in a fairly ordinary equity,
+with cryptocurrency considerably worse &mdash; then both the simulation and the closed form understate the
+probability of extreme outcomes, and they do so in the same direction. Agreement between them is not
+evidence of correctness. The fix is to simulate from a distribution that matches the data: a Student-t, a
+jump-diffusion, a stochastic-volatility process, or a bootstrap from historical returns. That is Monte
+Carlo's actual advantage, and it is thrown away by defaulting to NORM.S.INV.</div>
+</div>
+</div>
+
+</div>
+<script src="lab.js"></script>
+<script>
+
+function gate(){
+  Lab.report("gateOut",Lab.gradeItems([
+    {id:"q1",label:"Q1 GBM form",type:"select",is:"a"},
+    {id:"q2",label:"Q2 Ito correction",type:"select",is:"a"},
+    {id:"q3",label:"Q3 convergence rate",type:"select",is:"2"},
+    {id:"q4",label:"Q4 Excel normal draw",type:"select",is:"a"}
+  ]),80,function(){Lab.show("unlocked");});
+}
+function gradeAll(){
+  Lab.report("out",Lab.gradeItems([
+    {id:"drift",label:"Drift term",expected:-0.01125,tol:0.0005},
+    {id:"diff",label:"Diffusion coefficient",expected:0.35,tol:0.0005},
+    {id:"bs",label:"Black-Scholes value",expected:8.0642,tol:0.02},
+    {id:"mc",label:"Simulated value (3 SE tolerance)",expected:8.0642,tol:1.276},
+    {id:"se",label:"Standard error",expected:0.4252,tol:0.15}
+  ]),80);
+}
+
+</script>
+</body>
+</html>
