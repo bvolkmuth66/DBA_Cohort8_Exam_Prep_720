@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DBA 720 Lab - Option Pricing and the Greeks</title>
+<title>DBA 720 Lab - Options in DerivaGem</title>
 <link rel="stylesheet" href="lab.css">
 </head>
 <body>
@@ -11,13 +11,15 @@
 <a class="back" href="index.html">&larr; All modules</a>
 
 <div class="card">
-<span class="kicker">Derivatives &middot; Hull Ch. 8&ndash;13 &middot; DerivaGem</span>
-<h1>Option Pricing and the Greeks</h1>
-<p class="sub">Black&ndash;Scholes, a two-step binomial tree, and put&ndash;call parity &mdash; in Excel and DerivaGem.</p>
+<span class="kicker">Derivatives &middot; DerivaGem &middot; Hull Ch. 8&ndash;13</span>
+<h1>Options in DerivaGem</h1>
+<p class="sub">Driving the tool, reading its output, and checking the result against an arbitrage identity.</p>
 <div class="note">
-<strong>Why this module exists.</strong> Professor Vo named the DerivaGem spreadsheet specifically in his
-exam-preparation note. Assignment&nbsp;5 covered Hull Ch.&nbsp;1&ndash;3 only; Chapters 8&ndash;13 are the
-options material DerivaGem exists to price, and nothing else in the lab touches it.
+<strong>Scope note.</strong> This module deliberately does <em>not</em> ask you to build Black&ndash;Scholes from
+d<sub>1</sub> and d<sub>2</sub> in a spreadsheet. The instructor's exam note said students &ldquo;may want to
+review&rdquo; the class derivatives material and the DerivaGem spreadsheet &mdash; a pointer to a tool, not an
+instruction to reconstruct the model. What follows is entering parameters, reading values, and knowing what
+they mean.
 </div>
 </div>
 
@@ -33,8 +35,8 @@ options material DerivaGem exists to price, and nothing else in the lab touches 
 <option value="d">c + p = S<sub>0</sub> + Ke<sup>&minus;rT</sup></option></select>
 
 <h3>Question 2</h3>
-<p>Holding everything else constant, an increase in volatility &sigma; has what effect on the value of a
-European <em>call</em> and a European <em>put</em>?</p>
+<p>Holding everything else constant, an increase in volatility &sigma; affects a European call and a European
+put how?</p>
 <select id="q2"><option value="">Select</option>
 <option value="a">Raises both</option>
 <option value="b">Raises the call, lowers the put</option>
@@ -52,9 +54,9 @@ European <em>call</em> and a European <em>put</em>?</p>
 <h3>Question 4</h3>
 <p>Is early exercise ever optimal for an American <em>call</em> on a non-dividend-paying stock?</p>
 <select id="q4"><option value="">Select</option>
-<option value="no">No &mdash; it is never optimal, so it prices as a European call</option>
-<option value="yes">Yes &mdash; whenever the option is deep in the money</option>
-<option value="some">Yes &mdash; but only in the final month before expiry</option></select>
+<option value="no">No &mdash; never optimal, so it prices as a European call</option>
+<option value="yes">Yes &mdash; whenever deep in the money</option>
+<option value="some">Yes &mdash; but only in the final month</option></select>
 
 <br><br>
 <button onclick="gate()">Submit Phase 1</button>
@@ -65,7 +67,7 @@ European <em>call</em> and a European <em>put</em>?</p>
 
 <div class="card">
 <h2>The contract</h2>
-<div class="scroll"><table><thead><tr><th>Parameter</th><th>Symbol</th><th>Value</th></tr></thead><tbody>
+<div class="scroll"><table><thead><tr><th class="lbl">Parameter</th><th>Symbol</th><th>Value</th></tr></thead><tbody>
 <tr><td class="lbl">Current stock price</td><td>S<sub>0</sub></td><td>$50.00</td></tr>
 <tr><td class="lbl">Strike price</td><td>K</td><td>$52.00</td></tr>
 <tr><td class="lbl">Risk-free rate (continuous, annual)</td><td>r</td><td>5.0%</td></tr>
@@ -73,29 +75,22 @@ European <em>call</em> and a European <em>put</em>?</p>
 <tr><td class="lbl">Time to maturity</td><td>T</td><td>0.5 years</td></tr>
 <tr><td class="lbl">Dividend yield</td><td>q</td><td>0.0%</td></tr>
 </tbody></table></div>
-<p>European options. The stock pays no dividends.</p>
+<p>European options on a stock paying no dividends.</p>
 </div>
 
 <div class="card">
-<h2>Part A &mdash; Black&ndash;Scholes in Excel</h2>
-<h4>Build it yourself</h4>
-<pre class="mono">d1 = ( LN(S/K) + (r + sigma^2/2)*T ) / ( sigma*SQRT(T) )
-d2 = d1 - sigma*SQRT(T)
+<h2>Part A &mdash; Black&ndash;Scholes in DerivaGem</h2>
+<ol class="steps">
+<li>Open DerivaGem and choose the <strong>Equity</strong> underlying type.</li>
+<li>Select <strong>Analytic European</strong> as the option type &mdash; that is the Black&ndash;Scholes engine.</li>
+<li>Enter the six parameters above.</li>
+<li>Calculate, then read off the call and put values and the Greeks the sheet reports.</li>
+</ol>
+<div class="note">DerivaGem reports vega per one percentage point of volatility and theta per calendar day. If
+your figures are off by a factor of 100 or 365, that convention is usually why.</div>
 
-call = S*NORM.S.DIST(d1,TRUE) - K*EXP(-r*T)*NORM.S.DIST(d2,TRUE)
-put  = K*EXP(-r*T)*NORM.S.DIST(-d2,TRUE) - S*NORM.S.DIST(-d1,TRUE)
-
-delta(call) = NORM.S.DIST(d1,TRUE)
-gamma       = NORM.S.DIST(d1,FALSE) / ( S*sigma*SQRT(T) )
-vega        = S*NORM.S.DIST(d1,FALSE)*SQRT(T) / 100      <i>per 1 percentage point of volatility</i></pre>
-<div class="note">Then open <strong>DerivaGem</strong>, choose Black&ndash;Scholes European, enter the same
-parameters and confirm every figure. Building it once and checking it against the tool is the point &mdash;
-in the exam you may have only one of the two.</div>
-
-<h3>Enter your results</h3>
+<h3>Enter what DerivaGem reports</h3>
 <div class="grid2">
-<div><label>d<sub>1</sub></label><input type="number" step="0.0001" id="d1"></div>
-<div><label>d<sub>2</sub></label><input type="number" step="0.0001" id="d2"></div>
 <div><label>Call value ($)</label><input type="number" step="0.0001" id="call"></div>
 <div><label>Put value ($)</label><input type="number" step="0.0001" id="put"></div>
 <div><label>Delta of the call</label><input type="number" step="0.0001" id="dc"></div>
@@ -107,49 +102,38 @@ in the exam you may have only one of the two.</div>
 <button class="ghost" onclick="Lab.reveal('aModel')">Show values</button>
 <div id="aOut"></div>
 <div id="aModel" class="model hidden">
-d<sub>1</sub> = 0.0390, d<sub>2</sub> = -0.1731;
-call = $3.9052, put = $4.6213;
-&Delta;<sub>call</sub> = 0.5156, &Delta;<sub>put</sub> = -0.4844
-(note &Delta;<sub>call</sub> &minus; &Delta;<sub>put</sub> = 1, which is put&ndash;call parity differentiated);
-&Gamma; = 0.0376; vega = 0.1409 per percentage point.
-The put is worth more than the call because the option is struck $2.00 out of the money for the
-call holder, and the interest saved on the strike does not offset that at this maturity.
+Call $3.9052, put $4.6213, &Delta;<sub>call</sub> 0.5156,
+&Delta;<sub>put</sub> -0.4844, &Gamma; 0.0376, vega 0.1409.<br><br>
+Two things worth reading off these numbers. &Delta;<sub>call</sub> &minus; &Delta;<sub>put</sub> = 1 exactly,
+which is put&ndash;call parity differentiated &mdash; a useful arithmetic check that you entered the parameters
+correctly. And the put is worth more than the call because the strike sits $2.00 above the current
+price, so the call starts out of the money.
 </div>
 </div>
 
 <div class="card">
-<h2>Part B &mdash; Two-step binomial tree</h2>
-<p>Price the same European call on a 2-step CRR tree over the same 0.5-year horizon.</p>
-<pre class="mono">dt = T/N
-u  = EXP(sigma*SQRT(dt))        d = 1/u
-p  = ( EXP(r*dt) - d ) / ( u - d )        <i>risk-neutral probability</i>
-
-Terminal payoffs: MAX(S_T - K, 0)
-Roll back: value = EXP(-r*dt) * ( p*V_up + (1-p)*V_down )</pre>
-
-<h3>Enter your results</h3>
+<h2>Part B &mdash; The same option on a binomial tree</h2>
+<p>Still in DerivaGem, switch the option type to <strong>Binomial European</strong> and set the number of time
+steps to <strong>2</strong>. Leave every other parameter unchanged and recalculate.</p>
 <div class="grid2">
-<div><label>u</label><input type="number" step="0.000001" id="bu"></div>
-<div><label>d</label><input type="number" step="0.000001" id="bd"></div>
-<div><label>Risk-neutral probability p</label><input type="number" step="0.000001" id="bp"></div>
-<div><label>Binomial call value ($)</label><input type="number" step="0.0001" id="bcall"></div>
+<div><label>Binomial call value, 2 steps ($)</label><input type="number" step="0.0001" id="bcall"></div>
 </div>
 <button onclick="gradeB()">Grade Part B</button>
-<button class="ghost" onclick="Lab.reveal('bModel')">Show values</button>
+<button class="ghost" onclick="Lab.reveal('bModel')">What this shows</button>
 <div id="bOut"></div>
 <div id="bModel" class="model hidden">
-u = 1.161834, d = 0.860708, p = 0.504342.
-Terminal stock prices: $37.04, $50.00, $67.49.
-Binomial call = <strong>$3.8435</strong> against Black&ndash;Scholes $3.9052 &mdash;
-a gap of $0.0617. Two steps is a crude discretisation of a continuous process;
-the tree converges on Black&ndash;Scholes as N rises. Build the same sheet with N = 50 and watch the
-difference close.
+The tree returns <strong>$3.8435</strong> against Black&ndash;Scholes $3.9052 &mdash; a gap of
+$0.0617. Two steps is a coarse discretisation of a continuous price process; the tree
+converges on the analytic value as steps increase. Raise the step count to 50 in the same sheet and watch the
+difference close. That convergence is the whole reason the binomial model is taught alongside
+Black&ndash;Scholes rather than as a rival to it &mdash; and unlike Black&ndash;Scholes, the tree extends to
+American options, where early exercise has to be checked at every node.
 </div>
 </div>
 
 <div class="card">
-<h2>Part C &mdash; Put&ndash;call parity as an arbitrage check</h2>
-<p>Do not price the put directly. Recover it from the call using parity, and confirm it matches Part A.</p>
+<h2>Part C &mdash; Put&ndash;call parity as a check</h2>
+<p>Do not price the put again. Recover it from the call you already have:</p>
 <pre class="mono">p = c + K*EXP(-r*T) - S</pre>
 <label>Put implied by parity ($)</label><input type="number" step="0.0001" id="pcp">
 <br>
@@ -157,12 +141,14 @@ difference close.
 <button class="ghost" onclick="Lab.reveal('cModel')">Why this matters</button>
 <div id="cOut"></div>
 <div id="cModel" class="model hidden">
-Parity gives $4.6213, identical to the Black&ndash;Scholes put. That is not a coincidence and not a
-numerical accident &mdash; parity is a <em>no-arbitrage identity</em>, not a model. It holds whatever the
-option-pricing model, because violating it is a riskless profit: buy the cheap side, sell the dear side,
-hold to expiry. This is the same law-of-one-price logic that Lyons and Viswanath-Natraj (2023) apply to
-stablecoin pegs, where the arbitrage is designed rather than assumed, and the paper measures what happens
-to the peg when the design improves.
+Parity gives $4.6213, identical to the value DerivaGem reported. That is not a coincidence and not
+a rounding accident &mdash; parity is a <em>no-arbitrage identity</em>, not a model. It holds whatever
+option-pricing model you use, because violating it is a riskless profit: buy the cheap side, sell the dear
+side, hold to expiry. It is therefore the fastest sanity check on any option figure you produce, including one
+a spreadsheet handed you.<br><br>
+It is also the same law-of-one-price logic Lyons and Viswanath-Natraj (2023) apply to stablecoin pegs, where
+the arbitrage is engineered rather than assumed and the paper measures what happens to the peg when the
+engineering improves.
 </div>
 </div>
 
@@ -174,29 +160,29 @@ to the peg when the design improves.
 options on a cryptocurrency rather than an equity?</p>
 <textarea id="i1"></textarea>
 <button class="ghost" onclick="Lab.reveal('i1m')">Model response</button>
-<div id="i1m" class="model hidden">The writer is short vega, so value is destroyed when volatility rises
-&mdash; and crypto volatility is both higher and far less stable than equity volatility. Worse, the
-Black&ndash;Scholes framework assumes constant volatility and lognormal returns, and crypto returns are
-fat-tailed and volatility-clustered, so realised moves arrive in bursts that the model treats as nearly
-impossible. The practical consequences are that quoted implied volatilities move violently, delta-hedging
-a short position requires rebalancing precisely when liquidity is worst, and the model's own price is
-least trustworthy exactly when the position is most exposed. Nakagawa and Sakemoto (2022) make the related
-point on the correlation side: the co-movement structure itself changes with market uncertainty, so
-hedges calibrated in calm conditions are not the hedges you hold in a crisis.</div>
+<div id="i1m" class="model hidden">The writer is short vega, so value is destroyed when volatility rises &mdash;
+and crypto volatility is both higher and far less stable than equity volatility. Worse, Black&ndash;Scholes
+assumes constant volatility and lognormal returns, while crypto returns are fat-tailed and
+volatility-clustered, so realised moves arrive in bursts the model treats as nearly impossible. Practically:
+implied volatilities move violently, delta-hedging a short position demands rebalancing precisely when
+liquidity is worst, and the model's price is least trustworthy exactly when the position is most exposed.
+Nakagawa and Sakemoto (2022) make the related point on the correlation side &mdash; co-movement itself shifts
+with market uncertainty, so a hedge calibrated in calm conditions is not the hedge you hold in a crisis.</div>
 
 <h3>2. Model risk</h3>
-<p>Both Black&ndash;Scholes and the binomial tree gave you a number. Under what circumstances would you
-distrust both?</p>
+<p>DerivaGem gave you a number twice, by two different methods. Under what circumstances would you distrust
+both?</p>
 <textarea id="i2"></textarea>
 <button class="ghost" onclick="Lab.reveal('i2m')">Model response</button>
-<div id="i2m" class="model hidden">Both rest on the same economics: continuous trading, no transaction
-costs, a known and constant volatility, a lognormal price process, and the ability to borrow and lend
-freely at the risk-free rate. The binomial tree is not an independent check on Black&ndash;Scholes &mdash; it
-converges to it, because it assumes the same world. Distrust both when trading is discontinuous (gaps,
-halts, exchange outages), when volatility is stochastic or jumps, when the underlying has fat tails, when
-funding is not available at the assumed rate, or when the position is large enough to move the market it
-is hedged in. Jorion's (2000) account of LTCM is precisely this failure mode: the models were not
-obviously wrong, the assumption that positions could be financed and unwound continuously was.</div>
+<div id="i2m" class="model hidden">Both rest on the same economics: continuous trading, no transaction costs,
+a known constant volatility, a lognormal price process, and free borrowing and lending at the risk-free rate.
+The binomial tree is not an independent check on Black&ndash;Scholes &mdash; it converges to it because it
+assumes the same world, which is why the agreement in Part B is reassuring about arithmetic and says nothing
+about realism. Distrust both when trading is discontinuous (gaps, halts, exchange outages), when volatility is
+stochastic or jumps, when the underlying has fat tails, when funding is unavailable at the assumed rate, or
+when the position is large enough to move the market it is hedged in. Jorion's (2000) account of LTCM is this
+failure mode: the models were not obviously wrong, the assumption that positions could be financed and unwound
+continuously was.</div>
 </div>
 
 </div>
@@ -215,27 +201,22 @@ function gate(){
 }
 function gradeA(){
   Lab.report("aOut",Lab.gradeItems([
-    {id:"d1",label:"d1",expected:0.039,tol:0.002},
-    {id:"d2",label:"d2",expected:-0.1731,tol:0.002},
-    {id:"call",label:"Call",expected:3.9052,tol:0.01},
-    {id:"put",label:"Put",expected:4.6213,tol:0.01},
-    {id:"dc",label:"Delta call",expected:0.5156,tol:0.002},
-    {id:"dp",label:"Delta put",expected:-0.4844,tol:0.002},
-    {id:"gam",label:"Gamma",expected:0.0376,tol:0.0008},
-    {id:"veg",label:"Vega",expected:0.1409,tol:0.004}
+    {id:"call",label:"Call",expected:3.9052,tol:0.02},
+    {id:"put",label:"Put",expected:4.6213,tol:0.02},
+    {id:"dc",label:"Delta call",expected:0.5156,tol:0.004},
+    {id:"dp",label:"Delta put",expected:-0.4844,tol:0.004},
+    {id:"gam",label:"Gamma",expected:0.0376,tol:0.001},
+    {id:"veg",label:"Vega",expected:0.1409,tol:0.006}
   ]),80);
 }
 function gradeB(){
   Lab.report("bOut",Lab.gradeItems([
-    {id:"bu",label:"u",expected:1.161834,tol:0.0005},
-    {id:"bd",label:"d",expected:0.860708,tol:0.0005},
-    {id:"bp",label:"p",expected:0.504342,tol:0.0008},
-    {id:"bcall",label:"Binomial call",expected:3.8435,tol:0.015}
-  ]),75);
+    {id:"bcall",label:"Binomial call, 2 steps",expected:3.8435,tol:0.02}
+  ]),100);
 }
 function gradeC(){
   Lab.report("cOut",Lab.gradeItems([
-    {id:"pcp",label:"Put from parity",expected:4.6213,tol:0.01}
+    {id:"pcp",label:"Put from parity",expected:4.6213,tol:0.02}
   ]),100);
 }
 

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DBA 720 Lab - Full Analysis: Treasury Allocation</title>
+<link rel="stylesheet" href="lab.css">
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">&larr; All modules</a>
+
+<div class="card">
+<span class="kicker">Exam format &middot; Open analysis task</span>
+<h1>Full Analysis: Treasury Allocation</h1>
+<p class="sub">A narrative, a dataset, and no instructions about which statistics to run. The closest thing
+here to an actual examination question.</p>
+<div class="note">
+<strong>How this differs from the other modules.</strong> Everywhere else the page tells you what to compute.
+Here it does not. Deciding <em>which</em> analyses the question calls for is the skill being practised, because
+that is what an open exam prompt demands. Phase 1 is where that judgement happens &mdash; work it before
+scrolling on.
+</div>
+</div>
+
+<div class="card">
+<h2>The brief</h2>
+<p>You sit on the investment committee of a regional bank. The treasury has $40,000,000 to allocate
+for a three-to-five year horizon under a <strong>capital preservation mandate</strong>: the committee's stated
+priority is protecting principal, with return a secondary objective.</p>
+<p>Two externally managed funds are under consideration. You have 48 months of returns for both, and for
+a broad market index over the same period. The risk-free rate is <strong>0.25% per month</strong>.</p>
+<p>The board has asked for a recommendation and the analysis behind it.</p>
+</div>
+
+<div class="card">
+<h2>Phase 1 &mdash; What will you run?</h2>
+<p>Select every analysis that belongs in a defensible answer, and leave out those that do not.</p>
+<label class="inline"><input type="checkbox" id="a1"> Descriptive statistics for each series, including skewness and kurtosis</label><br>
+<label class="inline"><input type="checkbox" id="a2"> Correlation of each fund with the market, and with each other</label><br>
+<label class="inline"><input type="checkbox" id="a3"> Regression of each fund's returns on the market, reporting alpha and beta</label><br>
+<label class="inline"><input type="checkbox" id="a4"> A risk-adjusted return measure such as the Sharpe ratio</label><br>
+<label class="inline"><input type="checkbox" id="a5"> Compare the two mean returns and recommend the higher one</label><br>
+<label class="inline"><input type="checkbox" id="a6"> A chi-square test of independence between the two funds</label><br>
+<br>
+<button onclick="gate()">Submit Phase 1</button>
+<div id="gateOut"></div>
+<div id="gateNote" class="model hidden">
+The first four belong. The fifth is the trap this dataset is built around &mdash; comparing means alone ignores
+the dispersion, the shape of the distribution, and the market exposure being bought, and on this data it
+produces the wrong recommendation. The sixth is a test for association between categorical variables and has
+no application to continuous return series.
+</div>
+</div>
+
+<div id="unlocked" class="hidden">
+<div class="card">
+<h2>Data &mdash; 48 monthly returns (%)</h2>
+<div id="tbl"></div>
+<button class="ghost" onclick="expCSV()">Export CSV</button>
+<div class="note">No step-by-step instructions this time. Everything you need is
+<span class="mono">AVERAGE</span>, <span class="mono">VAR.S</span>, <span class="mono">STDEV.S</span>,
+<span class="mono">SKEW</span>, <span class="mono">KURT</span>, <span class="mono">COVARIANCE.S</span>,
+<span class="mono">CORREL</span>, <span class="mono">SLOPE</span>, <span class="mono">INTERCEPT</span> and
+<span class="mono">RSQ</span>.</div>
+</div>
+
+<div class="card">
+<h2>Phase 2 &mdash; Your results</h2>
+<h4>Fund A</h4>
+<div class="grid2">
+<div><label>Mean (%)</label><input type="number" step="0.0001" id="mA"></div>
+<div><label>Standard deviation</label><input type="number" step="0.0001" id="sA"></div>
+<div><label>Skewness</label><input type="number" step="0.0001" id="skA"></div>
+<div><label>Excess kurtosis</label><input type="number" step="0.0001" id="kuA"></div>
+<div><label>Worst single month (%)</label><input type="number" step="0.01" id="minA"></div>
+<div><label>Beta vs market</label><input type="number" step="0.0001" id="beA"></div>
+<div><label>Alpha</label><input type="number" step="0.0001" id="alA"></div>
+<div><label>Sharpe ratio</label><input type="number" step="0.0001" id="shA"></div>
+</div>
+<h4>Fund B</h4>
+<div class="grid2">
+<div><label>Mean (%)</label><input type="number" step="0.0001" id="mB"></div>
+<div><label>Standard deviation</label><input type="number" step="0.0001" id="sB"></div>
+<div><label>Skewness</label><input type="number" step="0.0001" id="skB"></div>
+<div><label>Excess kurtosis</label><input type="number" step="0.0001" id="kuB"></div>
+<div><label>Worst single month (%)</label><input type="number" step="0.01" id="minB"></div>
+<div><label>Beta vs market</label><input type="number" step="0.0001" id="beB"></div>
+<div><label>Alpha</label><input type="number" step="0.0001" id="alB"></div>
+<div><label>Sharpe ratio</label><input type="number" step="0.0001" id="shB"></div>
+</div>
+<h4>Relationships</h4>
+<div class="grid2">
+<div><label>Correlation A &harr; Market</label><input type="number" step="0.0001" id="cAM"></div>
+<div><label>Correlation B &harr; Market</label><input type="number" step="0.0001" id="cBM"></div>
+<div><label>Correlation A &harr; B</label><input type="number" step="0.0001" id="cAB"></div>
+</div>
+<button onclick="gradeP2()">Grade Phase 2</button>
+<button class="ghost" onclick="Lab.reveal('m2')">Show values</button>
+<div id="p2Out"></div>
+<div id="m2" class="model hidden">
+<strong>Fund A</strong> &mdash; mean 1.821, SD 8.2162, skewness -2.9322, excess kurtosis 14.1199,
+worst month -40.36%, beta 1.6261, alpha -0.32, Sharpe 0.1912.<br>
+<strong>Fund B</strong> &mdash; mean 1.1581, SD 2.8263, skewness -0.209, excess kurtosis 0.2185,
+worst month -6.17%, beta 0.6457, alpha 0.308, Sharpe 0.3213.<br>
+Correlations &mdash; A with market 0.7223, B with market 0.8338, A with B 0.6156.
+</div>
+</div>
+
+<div class="card">
+<h2>Phase 3 &mdash; The recommendation</h2>
+<label>Which fund do you recommend, given the mandate?</label>
+<select id="rec"><option value="">Select</option>
+<option value="A">Fund A</option><option value="B">Fund B</option>
+<option value="split">Split the allocation between them</option></select>
+
+<h3>Write your recommendation for the board</h3>
+<p>Three or four paragraphs. State the recommendation, give the evidence, and be explicit about what the
+analysis cannot tell them.</p>
+<textarea id="essay" style="min-height:200px"></textarea>
+<br>
+<button onclick="gradeP3()">Check recommendation</button>
+<button class="ghost" onclick="Lab.reveal('m3')">Model response</button>
+<div id="p3Out"></div>
+<div id="m3" class="model hidden">
+<p><strong>Recommend Fund B.</strong> Fund A returns more on average &mdash; 1.821% per month against
+1.1581% &mdash; and that is the only measure on which it wins. Everything else points the other way.</p>
+<p>Fund A's standard deviation is 8.2162, roughly 2.9 times Fund B's 2.8263. Adjusting return
+for that dispersion reverses the ranking: Sharpe ratios are 0.1912 for A against <strong>0.3213</strong>
+for B. The regressions sharpen it further. Fund A carries a beta of 1.6261, so most of its return is
+compensation for market exposure the committee could buy more cheaply through an index; its alpha is
+<strong>-0.32</strong> &mdash; negative, meaning the manager has destroyed value relative to that exposure.
+Fund B runs a beta of 0.6457 with a positive alpha of 0.308. On the evidence, A is a leveraged market
+position and B is a genuinely lower-risk one.</p>
+<p>The distributional evidence is decisive under a capital preservation mandate. Fund A's returns are
+strongly left-skewed (-2.9322) with excess kurtosis of 14.1199 &mdash; far from normal, with losses
+clustered in rare, severe months. Its worst single month was <strong>-40.36%</strong>, against
+-6.17% for Fund B. This matters twice over: the mandate is to protect principal, and a
+single-month drawdown of that size is precisely the outcome the mandate exists to prevent; and the Sharpe
+ratio itself is <em>unreliable</em> for Fund A, because standard deviation treats upside and downside
+symmetrically and cannot see a fat left tail. Fund A's already-inferior Sharpe therefore flatters it.</p>
+<p>What the analysis cannot settle. 48 months is a short record, and with rare large losses driving
+Fund A's statistics, a handful of observations carry most of the estimates &mdash; all of these figures have wide
+standard errors and alpha in particular is unlikely to be statistically distinguishable from zero for either
+fund. The relationships are associational and backward-looking: correlation with the market of 0.7223 and
+0.8338 describes the period observed, and correlations move in stressed markets, usually toward one, so
+the diversification implied by a correlation of 0.6156 between the funds may not be available when it is
+needed. There is nothing here on fees, liquidity, redemption terms, manager tenure, or strategy drift, any of
+which could change the conclusion. The recommendation is that B better fits the mandate on the evidence
+available, not that B is the better fund in all states of the world.</p>
+</div>
+</div>
+
+<div class="card">
+<h2>Marking your own answer</h2>
+<p>A strong response does these things. Check yours against the list.</p>
+<label class="inline"><input type="checkbox" id="r1"> States a recommendation in the first sentence rather than building to it</label><br>
+<label class="inline"><input type="checkbox" id="r2"> Uses risk-adjusted comparison, not raw means</label><br>
+<label class="inline"><input type="checkbox" id="r3"> Separates market exposure (beta) from manager contribution (alpha)</label><br>
+<label class="inline"><input type="checkbox" id="r4"> Cites the skewness and kurtosis, and says what they imply for the mandate</label><br>
+<label class="inline"><input type="checkbox" id="r5"> Notes that the Sharpe ratio is itself unreliable under non-normality</label><br>
+<label class="inline"><input type="checkbox" id="r6"> Ties the evidence explicitly back to the capital preservation mandate</label><br>
+<label class="inline"><input type="checkbox" id="r7"> States the limits: short sample, wide standard errors, association not causation</label><br>
+<label class="inline"><input type="checkbox" id="r8"> Names what is missing from the data entirely (fees, liquidity, terms)</label><br>
+<div class="note">Items 4, 5 and 7 are where most answers fall short, and they are the ones that separate a
+competent response from a doctoral one.</div>
+</div>
+</div>
+
+</div>
+<script src="lab.js"></script>
+<script>
+
+const D=[[8.42, 3.91, 3.98], [1.57, -1.45, -0.46], [-3.81, -1.03, -2.2], [-0.58, -0.65, -1.78], [7.58, 1.88, 5.75], [-1.04, -0.8, -1.04], [-2.74, 1.87, -0.41], [8.02, 6.36, 3.9], [8.13, 1.73, 3.35], [-0.17, -0.41, -0.69], [-0.39, 2.18, -0.26], [4.4, 4.64, 4.07], [11.87, 6.88, 7.17], [-6.4, 0.47, -2.55], [1.55, 0.75, 0.19], [6.96, 1.93, 5.56], [8.13, 0.06, 4.77], [-40.36, -6.17, -10.24], [10.43, 1.29, 4.28], [6.32, 4.39, 3.12], [7.75, 1.62, 3.19], [-9.19, 2.64, 6.28], [3.17, -0.92, -0.39], [0.65, 2.31, -2.03], [1.62, 4.25, 4.1], [7.44, 4.35, 5.01], [-4.12, -4.27, -4.08], [2.35, -0.58, 0.72], [11.49, 6.45, 8.34], [12.01, 2.8, 6.38], [8.4, 1.86, 2.2], [3.51, 0.66, -0.91], [9.1, 2.58, 5.05], [1.13, 1.16, -0.8], [1.31, -0.67, -1.54], [-6.31, -3.62, -3.24], [-0.67, -3.68, -2.51], [3.01, 1.14, 1.64], [4.08, 0.25, -1.17], [0.51, 2.5, 1.66], [0.52, -3.31, -1.99], [1.46, 0.58, 0.69], [-3.63, -1.98, -1.23], [3.16, 0.63, 0.14], [0.62, -0.48, -1.71], [-9.82, 2.62, 4.13], [9.02, 5.68, 7.33], [0.95, 3.19, 1.43]];
+function gate(){
+  const ok=Lab.report("gateOut",Lab.gradeItems([
+    {id:"a1",label:"Descriptive statistics incl. skew/kurtosis",type:"checkbox",is:true},
+    {id:"a2",label:"Correlations",type:"checkbox",is:true},
+    {id:"a3",label:"Regression on the market",type:"checkbox",is:true},
+    {id:"a4",label:"Risk-adjusted return",type:"checkbox",is:true},
+    {id:"a5",label:"Means-only comparison excluded",type:"checkbox",is:false},
+    {id:"a6",label:"Chi-square excluded",type:"checkbox",is:false}
+  ]),85,function(){Lab.show("unlocked");draw();});
+  Lab.reveal("gateNote");
+}
+function draw(){
+  Lab.renderTable("tbl",["Month","Fund A","Fund B","Market Index"],
+    D.map((r,i)=>[i+1].concat(r.map(v=>v.toFixed(2)))));
+}
+function expCSV(){Lab.exportCSV("treasury_allocation.csv",["Month","FundA","FundB","Market"],
+  D.map((r,i)=>[i+1].concat(r)));}
+function gradeP2(){
+  Lab.report("p2Out",Lab.gradeItems([
+    {id:"mA",label:"A mean",expected:1.821,tol:0.01},
+    {id:"sA",label:"A SD",expected:8.2162,tol:0.01},
+    {id:"skA",label:"A skewness",expected:-2.9322,tol:0.02},
+    {id:"kuA",label:"A excess kurtosis",expected:14.1199,tol:0.05},
+    {id:"minA",label:"A worst month",expected:-40.36,tol:0.01},
+    {id:"beA",label:"A beta",expected:1.6261,tol:0.01},
+    {id:"alA",label:"A alpha",expected:-0.32,tol:0.02},
+    {id:"shA",label:"A Sharpe",expected:0.1912,tol:0.006},
+    {id:"mB",label:"B mean",expected:1.1581,tol:0.01},
+    {id:"sB",label:"B SD",expected:2.8263,tol:0.01},
+    {id:"skB",label:"B skewness",expected:-0.209,tol:0.02},
+    {id:"kuB",label:"B excess kurtosis",expected:0.2185,tol:0.05},
+    {id:"minB",label:"B worst month",expected:-6.17,tol:0.01},
+    {id:"beB",label:"B beta",expected:0.6457,tol:0.01},
+    {id:"alB",label:"B alpha",expected:0.308,tol:0.02},
+    {id:"shB",label:"B Sharpe",expected:0.3213,tol:0.006},
+    {id:"cAM",label:"Corr A-Market",expected:0.7223,tol:0.006},
+    {id:"cBM",label:"Corr B-Market",expected:0.8338,tol:0.006},
+    {id:"cAB",label:"Corr A-B",expected:0.6156,tol:0.006}
+  ]),80);
+}
+function gradeP3(){
+  const words=(Lab.val("essay")||"").trim().split(/\s+/).filter(Boolean).length;
+  const res=Lab.gradeItems([{id:"rec",label:"Recommendation",type:"select",is:"B"}]);
+  Lab.report("p3Out",res,100);
+  if(words<120){
+    document.getElementById("p3Out").innerHTML+=
+      '<div class="result poor"><strong>Your written answer is '+words+
+      ' words.</strong> A board recommendation carrying this much evidence needs more than that. '+
+      'Write it out before reading the model response &mdash; recognising the argument is much easier '+
+      'than producing it.</div>';
+  }
+}
+
+</script>
+</body>
+</html>

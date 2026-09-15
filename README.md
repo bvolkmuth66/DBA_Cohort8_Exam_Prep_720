@@ -2,102 +2,110 @@
 
 Excel practice for the computational portion of the DBA 720 comprehensive examination.
 
-## Version 3.0 — what changed
+## How this lab is weighted
 
-Version 2.0 contained five survey-research datasets, all drilling the same exercise: identify variables,
-export to Excel, run a multiple regression, interpret. That is one quadrant of the Excel work the
-instructor's exam-preparation note describes, and it omitted the one topic he named by name — derivatives.
+The instructor's exam-preparation note contains two instructions about Excel, and they are not equally strong:
 
-Version 3.0 adds the missing coverage and consolidates the survey material into a single, better module.
+> We did use Excel in class for derivatives, so you **may want to** review that material and DerivaGem
+> spreadsheet.
+>
+> **Please also review** how to perform regression analysis in Excel, along with basic statistical functions
+> such as mean, variance, covariance, correlation, etc **that you learned in your statistics course**.
 
-### Files
+One is a suggestion, the other a directive — and "that you learned in your statistics course" frames the
+statistics as elementary prior knowledge being refreshed, not new machinery being acquired.
+
+The expected exam task is therefore a **supplied dataset and a narrative**, with descriptive statistics,
+correlation and regression run in Excel and interpreted in writing. Not formulas reconstructed from memory.
+The modules are ordered and scoped to match.
+
+## Modules
 
 | File | Covers |
 |---|---|
-| `index.html` | Module index, grouped by type, derivatives first. |
-| `lab.css` | Shared stylesheet. |
-| `lab.js` | Shared helpers: Excel-equivalent statistics, tolerance-based grading, table rendering, CSV export. |
-| `DBA720_Deriv1_Futures.html` | Marking to market, margin calls, variation margin, minimum-variance hedge ratio, optimal contract count, basis risk. Hull Ch. 1–6. |
-| `DBA720_Deriv2_Options.html` | Black–Scholes in Excel, delta/gamma/vega, two-step CRR binomial tree, put–call parity as an arbitrage check. Hull Ch. 8–13 and DerivaGem. |
-| `DBA720_Quant1_MarketModel.html` | Regression of returns on an index: alpha, beta, R². Mean, variance, SD, skewness, excess kurtosis. Beta verified three ways including Cov/Var. |
-| `DBA720_Quant2_Portfolio.html` | Covariance and correlation matrices, equally weighted portfolio variance via MMULT, diversification benefit, Sharpe ratio, two-asset minimum-variance weight. |
-| `DBA720_Quant3_EventStudy.html` | Estimation versus event window, expected returns from the market model, abnormal returns, CAR, t-statistic. |
-| `DBA720_Quant4_MonteCarlo.html` | GBM simulation of terminal prices, valuation by simulation, standard error and the √n rule, validation against Black–Scholes. |
-| `DBA720_Dataset1.html` | Variable identification, multiple regression in Excel, VIF diagnostics, interpretation. Rebuilt — see below. |
+| `DBA720_Exam_FullAnalysis.html` | **Start here.** A narrative, 48 months of fund and market returns, and no instruction about what to compute. You choose the analyses, run them, and write a board recommendation. |
+| `DBA720_Quant1_MarketModel.html` | Mean, variance, SD, skewness, excess kurtosis, covariance, correlation, and a regression of returns on an index. Beta verified three ways including Cov/Var. |
+| `DBA720_Dataset1.html` | Variable identification, multiple regression in Excel, VIF diagnostics, interpretation. |
+| `DBA720_Quant2_Portfolio.html` | Covariance and correlation matrices, portfolio variance, diversification benefit, Sharpe ratio, two-asset minimum-variance weight. |
+| `DBA720_Quant3_EventStudy.html` | A narrative plus returns: regression on an estimation window, expected versus actual, abnormal returns, CAR, t-statistic. |
+| `DBA720_Deriv1_Futures.html` | Minimum-variance hedge ratio — a Cov/Var calculation on supplied data — plus margin and marking to market. |
+| `DBA720_Deriv2_Options.html` | Driving DerivaGem, reading its output, checking the result against put–call parity. |
+| `index.html`, `lab.css`, `lab.js` | Index page, shared stylesheet, shared helper library. |
 
-### Dataset 1 was rebuilt
+## Changes in 3.1
 
-The original data had predictor intercorrelations of 0.71–0.91, variance inflation factors near 9, and
-R² = 0.976. Under collinearity that severe the individual coefficients are unstable, so the graded
-"strongest predictor" question had no well-defined answer.
+**Monte Carlo was cut.** No reading was assigned for Week 11 and the exam note does not mention simulation.
+Asking for drift terms and diffusion coefficients was formula work the evidence does not support.
 
-The data has been regenerated with near-orthogonal predictors (VIFs 1.01–1.24), and a third phase now asks
-the student to compute the VIFs and decide whether ranking the predictors is defensible at all. Recognising
-when a question *cannot* be answered from the data is the judgement the examination is testing, and a
-regression output does not announce it.
+**The options module was rewritten as tool use.** It previously had students build Black–Scholes from d₁ and
+d₂ in a spreadsheet. It now has them drive DerivaGem, read the values and Greeks it reports, switch to a
+binomial tree to see convergence, and verify with put–call parity. The instructor pointed at a tool, not at a
+derivation.
 
-### Datasets 2–5 were retired
+**The futures module leads with the hedge ratio.** The minimum-variance hedge ratio is
+`COVARIANCE.S / VAR.S` on supplied data — the same estimator as beta, and squarely inside "basic statistical
+functions." Margin arithmetic is now the second problem rather than the first.
 
-They ran the same exercise as one another and as Dataset 1, on the same kind of Likert perception data, and
-added no coverage the rebuilt Dataset 1 does not provide. They are not referenced anywhere in v3.0.
+**A full-analysis module was added**, in the predicted exam format. Its first phase asks which analyses the
+question calls for, before any are named, because choosing them is the skill an open prompt tests. The dataset
+is built so the naive answer is wrong: one fund has the higher mean return, the other has the better Sharpe
+ratio, a positive alpha, and nothing resembling the first fund's −40% month, skewness of −2.9 and excess
+kurtosis of 14.
 
-They remain in the repository's git history and can be recovered at any time — deleting a file in git does
-not destroy it. GitHub keeps every version, reachable through the repository's commit history.
+## Changes in 3.0
 
-### The `data/` folder
+**Dataset 1 was rebuilt.** The original data had predictor intercorrelations of 0.71–0.91, VIFs near 9, and
+R² = 0.976. Under collinearity that severe the coefficients are unstable, so the graded "strongest predictor"
+question had no well-defined answer. The data was regenerated with near-orthogonal predictors (VIFs
+1.01–1.24), and a third phase now asks the student to compute the VIFs and decide whether ranking the
+predictors is defensible at all.
 
-The five CSVs under `data/` were parallel copies of data already embedded in the page JavaScript; no page
-ever read them. `Dataset1.csv` holds the superseded multicollinear data. The folder is unused by v3.0 and
-can be deleted.
+**Datasets 2–5 were retired.** They ran the same exercise as one another and as Dataset 1, on the same kind of
+Likert data, and added no coverage the rebuilt Dataset 1 does not provide. They remain in the repository's git
+history and can be recovered at any time.
 
-## Design changes in v3.0
+**The `data/` folder is unused.** Those five CSVs were parallel copies of data already embedded in the page
+JavaScript; no page ever read them, and `Dataset1.csv` holds the superseded data. Safe to delete.
 
-**Tolerance-based grading.** v2.0 compared entered values for exact equality, so a correct answer rounded
-differently was marked wrong. `Lab.gradeItems` grades within a per-item tolerance and reports the expected
-value on a miss.
-
-**Per-item feedback.** Results show which specific entries were wrong and what was expected, rather than a
-bare percentage.
+**Tolerance-based grading with per-item feedback.** v2.0 compared entered values for exact equality, so a
+correct answer rounded differently was marked wrong. Results now show which entries were wrong and what was
+expected.
 
 **Model responses.** Every module ends with interpretation questions and a reveal-on-demand model response
-that connects the computation back to the course readings. The exam pairs numbers with interpretation —
-Assignment 5 asked "which trader does better?" alongside the arithmetic — so the lab does too.
+connecting the computation back to the course readings.
 
 **Excel traps flagged.** The Data Analysis ToolPak's Covariance tool returns *population* covariance while
-`COVARIANCE.S` returns sample covariance; `KURT` returns *excess* kurtosis; `RAND()` is volatile. Each is
-called out where it bites.
+`COVARIANCE.S` returns sample covariance; `KURT` returns *excess* kurtosis. Each is called out where it bites.
 
 ## Installing
 
-Upload all eleven files to the repository root and commit. No build step, no dependencies, no external
-requests — GitHub Pages serves it as-is.
+Upload all ten files to the repository root and commit. No build step, no dependencies, no external requests.
 
 ```
 index.html
 lab.css
 lab.js
-DBA720_Dataset1.html
-DBA720_Deriv1_Futures.html
-DBA720_Deriv2_Options.html
+DBA720_Exam_FullAnalysis.html
 DBA720_Quant1_MarketModel.html
+DBA720_Dataset1.html
 DBA720_Quant2_Portfolio.html
 DBA720_Quant3_EventStudy.html
-DBA720_Quant4_MonteCarlo.html
+DBA720_Deriv1_Futures.html
+DBA720_Deriv2_Options.html
 README.md
 ```
 
 ## Answer keys
 
-Every figure in every module was computed with the Excel-equivalent estimator — `VAR.S`, `COVARIANCE.S`,
-`SKEW`, `KURT`, `SLOPE`, `INTERCEPT`, `STEYX` — so Excel results match the keys rather than approximating
-them. The generating script is `genkeys.py`; `keys.json` holds the computed values. Neither is needed by the
-site; keep them if you want to regenerate or extend the data.
+Every figure was computed with the Excel-equivalent estimator — `VAR.S`, `COVARIANCE.S`, `SKEW`, `KURT`,
+`SLOPE`, `INTERCEPT`, `STEYX` — so Excel results match the keys rather than approximating them. The generating
+script is `genkeys.py` and `keys.json` holds the values. Neither is needed by the site.
 
 ## Still not covered
 
-**The essays.** This lab is the computational half only. The reading list is the primary preparation
-resource for the rest, per the instructor's note.
+**The essays.** This lab is the computational half only. The reading list is the primary preparation resource
+for the rest, per the instructor's note.
 
-**Whether any of this is examined.** The exam note summarised preparation for the Summer 2025 *course
-final*. If the comprehensive examination is a pure essay instrument set at program level, the derivatives
-and Excel work here is not required. Worth confirming before spending hours on DerivaGem.
+**Whether any of this is examined.** The exam note summarised preparation for the Summer 2025 *course final*.
+If the comprehensive examination is a pure essay instrument set at program level, none of the Excel work here
+is required. Worth confirming.

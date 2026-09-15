@@ -181,6 +181,35 @@ K['quant4']=dict(params=mc, bs_call=round(bench['call'],4), bs_put=round(bench['
   se_1000=round(float(pay.std(ddof=1)/math.sqrt(1000)),4),
   se_10000=round(float(pay.std(ddof=1)/math.sqrt(10000)),4))
 
+
+# ---------- Exam simulation: full analysis task ----------
+rng=np.random.default_rng(51619)
+_n=48
+_mkt=np.round(rng.normal(0.70,3.60,_n),2)
+_jump=(rng.random(_n)<0.0625)*np.abs(rng.normal(16.0,4.0,_n))
+_A=np.round(1.15+1.35*_mkt+rng.normal(0,2.0,_n)-_jump,2)
+_B=np.round(0.45+0.60*_mkt+rng.normal(0,1.5,_n),2)
+_rf=0.25
+def _reg(y,x):
+    b=excel_cov_s(y,x)/excel_var(x); a=float(np.mean(y))-b*float(np.mean(x))
+    return a,b,excel_corr(y,x)**2
+_aA,_bA,_r2A=_reg(_A,_mkt); _aB,_bB,_r2B=_reg(_B,_mkt)
+K['examsim']=dict(n=_n, rf=_rf, seed=51619, names=["Fund A","Fund B","Market Index"],
+  data=[[float(_A[i]),float(_B[i]),float(_mkt[i])] for i in range(_n)],
+  mean=dict(A=round(float(_A.mean()),4),B=round(float(_B.mean()),4),M=round(float(_mkt.mean()),4)),
+  sd=dict(A=round(excel_sd(_A),4),B=round(excel_sd(_B),4),M=round(excel_sd(_mkt),4)),
+  var=dict(A=round(excel_var(_A),4),B=round(excel_var(_B),4),M=round(excel_var(_mkt),4)),
+  skew=dict(A=round(excel_skew(_A),4),B=round(excel_skew(_B),4)),
+  kurt=dict(A=round(excel_kurt(_A),4),B=round(excel_kurt(_B),4)),
+  minret=dict(A=round(float(_A.min()),2),B=round(float(_B.min()),2)),
+  cov=dict(AM=round(excel_cov_s(_A,_mkt),4),BM=round(excel_cov_s(_B,_mkt),4),AB=round(excel_cov_s(_A,_B),4)),
+  cor=dict(AM=round(excel_corr(_A,_mkt),4),BM=round(excel_corr(_B,_mkt),4),AB=round(excel_corr(_A,_B),4)),
+  alpha=dict(A=round(_aA,4),B=round(_aB,4)),
+  beta=dict(A=round(_bA,4),B=round(_bB,4)),
+  r2=dict(A=round(_r2A,4),B=round(_r2B,4)),
+  sharpe=dict(A=round((float(_A.mean())-_rf)/excel_sd(_A),4),
+              B=round((float(_B.mean())-_rf)/excel_sd(_B),4)))
+
 json.dump(K, open('keys.json','w'), indent=1)
 print("dataset1 R2=%.4f adj=%.4f coef=%s VIF=%s predcorr=%s"%(K['dataset1']['r2'],K['dataset1']['adj_r2'],K['dataset1']['coef'],K['dataset1']['vif'],K['dataset1']['pred_corr']))
 print("deriv1 h=%.4f N=%.4f->%d  callprice=%.2f finalbal=%.2f"%(K['deriv1']['h'],K['deriv1']['N_exact'],K['deriv1']['N_round'],K['deriv1']['margin']['call_price'],K['deriv1']['final_balance']))
